@@ -55,9 +55,6 @@ export class HomepageComponent implements OnInit {
    
     
     
-@HostListener("window:scroll", [])
-onWindowScroll() {
-  console.log("dicks");
-}
+
 
 }
