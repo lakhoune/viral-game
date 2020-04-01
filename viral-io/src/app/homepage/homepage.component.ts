@@ -16,6 +16,8 @@ import {
   // ...
 } from '@angular/animations';
 
+
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -46,14 +48,21 @@ import {
   ]
 })
 export class HomepageComponent implements OnInit {
-
+playButton :boolean = false;
+players :boolean = true;
   constructor() { }
 
   ngOnInit() {
      
   }
    
+newLobby(){
     
+    this.playButton = true;
+    this.players = false;
+    console.log(this.playButton);
+    
+}
     
 
 
