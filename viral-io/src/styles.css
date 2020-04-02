@@ -3,9 +3,11 @@
 
 :root {
   --main-green: rgba(153, 255, 153,0.6);
-    --yelloooooow: rgba(255, 217, 0, 0.5);
+    --yelloooooow: rgba(190, 255, 113, 0.5);
+    --yellowG:rgba(228, 255, 113, 0.5);
     --mauve:rgba(167,84,211,0.8);
     --rouge:rgba(255,70,13,0.7);
+    --pastelyellow:rgba(255, 217, 0, 0.5);
 }
 
 .lobbyButton:active{background-color: rgba(20,20,20,1) !important; color: lightgray;}
