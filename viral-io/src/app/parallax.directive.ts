@@ -15,6 +15,7 @@ export class ParallaxDirective {
   @HostListener("window:scroll", ["$event"])
   onWindowScroll(event) {
     this.eleRef.nativeElement.style.top = (this.initialTop - (window.scrollY * this.parallaxRatio)) + 'px'
+    console.log("deck Coronnes huet den do!")
   }
 
 }
@@ -23,4 +24,5 @@ export class ParallaxDirective {
 //use as follows
 
 
-/// appParallax [ratio]="-0.2"
+/// appParallax [ratio]="-0.2" //negative and positive values excepted
+/// set position to fixed, rel or absolute
