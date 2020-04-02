@@ -7,7 +7,7 @@ const services = require("./services");
 const Lobby = require("./models/Lobby");
 const Participant = require("./models/Participant");
 
-//Database
+//Database -- only local for now
 mongoose.connect("mongodb://localhost/test", {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -18,49 +18,59 @@ db.once("open", function() {
   console.log("Database connection successfull");
 });
 
-var lobbies = [];
-
 //Express server
 const server = app.listen(80, () => {
   console.log("listening on 80");
 });
 
-//Static Files
+//Static Files -- this is only for testing this will later point to the built angular app
 app.use(express.static("static"));
 
 //Service Middleware
 app.use(require("./middleware/serviceMiddleware")());
 
 const io = socket(server);
-
 const chat = io.of("/admin");
 
 io.on("connection", socket => {
-  io.sockets.emit("log", socket.id + " joined");
-  console.log(socket.id, " joined");
-  socket.on("chat", data => {
-    console.log(data);
-    io.sockets.emit("log", socket.id + " says: " + data);
-  });
+  //console.log(socket.id, " connected");
+
   socket.on("createLobby", lobbySize => {
-    services.createLobby(lobbySize, lobbyId => {
-      socket.emit(lobbyId);
+    services.lobby.createLobby(lobbySize, lobbyId => {
+      services.lobby.addToLobby(socket.id, result => {
+        if (result) {
+          //create socket io room
+          //let creator join the room
+          socket.emit("msg", "Success");
+        }
+      });
+    });
+    //create socket io room
+  });
+
+  socket.on("joinLobby", lobbyId => {
+    services.lobby.checkFreeSpace(lobbyId, free => {
+      if (free) {
+        services.lobby.addToLobby(socket.id, result => {
+          if (result) {
+            //let participant join the room
+            socket.emit("msg", "Success");
+          }
+        });
+      } else {
+        socket.emit("error", { msg: "Lobby full", value: lobbyId });
+      }
     });
   });
+  //set name and create participants inside room
 });
 
-io.on("joinLobby", lobbyId => {});
-
-io.on("createLobby", lobbySize => {
-  var lobby = new Lobby({ size: lobbySize });
-  lobby.partipants = [socket.id];
-});
-
+//chat only for testing
 chat.on("connection", socket => {
-  chat.emit("chat", socket.id + " joined in admin");
-  console.log(socket.id, " joined in admin");
+  chat.emit("chat", socket.id + " joined in chat");
+  console.log(socket.id, " connected to chat");
+
   socket.on("chat", data => {
-    console.log(data);
     chat.emit("log", socket.id + " says: " + data);
   });
 });

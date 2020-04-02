@@ -10,6 +10,13 @@ module.exports = function lobbyService() {
     // .
     callback(/*id of lobby*/);
   };
+  lobbyService.checkFreeSpace = (lobbyId, callback) => {
+    //implement
+    // .
+    // .
+    // .
+    callback(/*true if lobby.size-participants.length>0*/);
+  };
   lobbyService.addToLobby = (participantId, callback) => {
     //implement
     // .

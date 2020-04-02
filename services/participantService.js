@@ -3,7 +3,7 @@ const Lobby = require("../models/Lobby");
 const Participant = require("../models/Participant");
 
 module.exports = function participantService() {
-  participantService.createParticipant = (name, callback) => {
+  participantService.createParticipant = (id, name, callback) => {
     //implement
     // .
     // .
