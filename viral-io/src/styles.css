@@ -4,3 +4,5 @@
 :root {
   --main-green: rgba(153, 255, 153,0.6);
 }
+
+.lobbyButton:active{background-color: rgba(20,20,20,1) !important; color: lightgray;}

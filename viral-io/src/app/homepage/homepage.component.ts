@@ -63,7 +63,10 @@ newLobby(){
     console.log(this.playButton);
     
 }
+   
+createLobby(size:number){
     
+}    
 
 
 }

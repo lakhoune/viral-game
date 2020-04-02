@@ -9,6 +9,7 @@ import { HomepageComponent } from './homepage/homepage.component';
 import { DnafloatDirective } from './dnafloat.directive';
 import { CellfloatDirective } from './cellfloat.directive';
 import { RotateOnScrollDirective } from './rotate-on-scroll.directive';
+import { ParallaxDirective } from './parallax.directive';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { RotateOnScrollDirective } from './rotate-on-scroll.directive';
     HomepageComponent,
     DnafloatDirective,
     CellfloatDirective,
-    RotateOnScrollDirective
+    RotateOnScrollDirective,
+    ParallaxDirective
   ],
   imports: [
     BrowserModule,

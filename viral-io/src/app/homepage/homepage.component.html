@@ -18,9 +18,9 @@
     
                 <div  style="width: 300px; margin: auto; background-color:; margin-top: 25px; margin-bottom: 25px;">
                 <div style="display: inline-block;  width: 50px; height: 50px; background-color:; margin: auto; background-image: url(../../assets/play.svg);" [hidden]="playButton" (click)="newLobby()"><h5 style="visibility: hidden; line-height: 50px; margin: auto;">.</h5></div>
-                <div style="display: inline-block; border-radius: 50%;  width: 50px; height: 50px;  background-color: rgba(20,20,20,0.2); margin-left:10px; margin-right:10px; "  [hidden]="players"> <h5 style="line-height: 50px; margin: auto;">4</h5></div>
-                <div style="display: inline-block; border-radius: 50%;  width: 50px; height: 50px;  background-color: rgba(20,20,20,0.2); margin-left:10px; margin-right:10px; "  [hidden]="players"> <h5 style="line-height: 50px; margin: auto;">6</h5></div>
-                <div style="display: inline-block; border-radius: 50%;  width: 50px; height: 50px;  background-color: rgba(20,20,20,0.2); margin-left:10px; margin-right:10px; "   [hidden]="players"> <h5 style="line-height: 50px; margin: auto;">8</h5></div>
+                <div class="lobbyButton" id="l_4" style="display: inline-block; border-radius: 50%;  width: 50px; height: 50px;  background-color: rgba(20,20,20,0.2); margin-left:10px; margin-right:10px; "  [hidden]="players"> <h5 style="line-height: 50px; margin: auto;" (click)="createLobby(4)">4</h5></div>
+                <div class="lobbyButton" id="l_6" style="display: inline-block; border-radius: 50%;  width: 50px; height: 50px;  background-color: rgba(20,20,20,0.2); margin-left:10px; margin-right:10px; "  [hidden]="players"> <h5 style="line-height: 50px; margin: auto;" (click)="createLobby(6)">6</h5></div>
+                <div class="lobbyButton" id="l_8" style="display: inline-block; border-radius: 50%;  width: 50px; height: 50px;  background-color: rgba(20,20,20,0.2); margin-left:10px; margin-right:10px; "   [hidden]="players"> <h5 style="line-height: 50px; margin: auto;" (click)="createLobby(8)">8</h5></div>
                     
                 </div>    
                 
