@@ -10,6 +10,7 @@ import { DnafloatDirective } from './dnafloat.directive';
 import { CellfloatDirective } from './cellfloat.directive';
 import { RotateOnScrollDirective } from './rotate-on-scroll.directive';
 import { ParallaxDirective } from './parallax.directive';
+import {SocketioService} from './socketio.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { ParallaxDirective } from './parallax.directive';
     BrowserModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [SocketioService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
