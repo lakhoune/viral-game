@@ -3,7 +3,7 @@ const Lobby = require("../models/Lobby");
 const Participant = require("../models/Participant");
 
 module.exports = function participantService() {
-  participantService.createParticipant = (id, name, callback) => {
+  participantService.createParticipant = (socketId, name, callback) => {
     //implement
     // .
     // .
@@ -11,7 +11,7 @@ module.exports = function participantService() {
     callback(/*id of participant*/);
   };
 
-  participantService.remove = (participantId, callback) => {
+  participantService.remove = (socketId, callback) => {
     //implement
     // .
     // .
@@ -19,12 +19,12 @@ module.exports = function participantService() {
     callback(/*true if success*/);
   };
 
-  participantService.checkParticipantId = (participantId, callback) => {
+  participantService.getParticipant = (socketId, callback) => {
     //implement
     // .
+    // .throw error if non existants
     // .
-    // .
-    callback(/*true if participant is found*/);
+    callback(/*participant if found*/);
   };
 
   return participantService;

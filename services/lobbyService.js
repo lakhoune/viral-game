@@ -17,14 +17,14 @@ module.exports = function lobbyService() {
     // .
     callback(/*true if lobby.size-participants.length>0*/);
   };
-  lobbyService.addToLobby = (lobbyId, participantId, callback) => {
+  lobbyService.addToLobby = (lobbyId, socketId, callback) => {
     //implement
     // .
     // .
     // .
     callback(/*true if success*/);
   };
-  lobbyService.removeFromLobby = (participantId, callback) => {
+  lobbyService.removeFromLobby = (socketId, callback) => {
     //implement
     // .
     // .
