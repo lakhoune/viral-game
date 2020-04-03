@@ -11,3 +11,13 @@
 }
 
 .lobbyButton:active{background-color: rgba(20,20,20,1) !important; color: lightgray;}
+
+
+html, body
+{
+   
+    overflow-x: hidden;
+     
+}
+
+html{height: 100%;}

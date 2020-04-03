@@ -11,5 +11,9 @@ export class NavbarComponent implements OnInit {
 
   ngOnInit() {
   }
+    
+    spacer = "col-3 n";
+    title = "col-6";
+    menu = "col-3";
 
 }
