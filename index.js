@@ -37,7 +37,7 @@ io.on("connection", socket => {
 
   socket.on("createLobby", lobbySize => {
     services.lobby.createLobby(lobbySize, lobbyId => {
-      services.lobby.addToLobby(socket.id, result => {
+      services.lobby.addToLobby(lobbyId, socket.id, result => {
         if (result) {
           //create socket io room
           //let creator join the room

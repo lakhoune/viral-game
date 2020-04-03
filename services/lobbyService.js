@@ -17,7 +17,7 @@ module.exports = function lobbyService() {
     // .
     callback(/*true if lobby.size-participants.length>0*/);
   };
-  lobbyService.addToLobby = (participantId, callback) => {
+  lobbyService.addToLobby = (lobbyId, participantId, callback) => {
     //implement
     // .
     // .
