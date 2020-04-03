@@ -12,6 +12,7 @@ import { RotateOnScrollDirective } from './rotate-on-scroll.directive';
 import { ParallaxDirective } from './parallax.directive';
 import {SocketioService} from './socketio.service';
 import { LobbyComponent } from './lobby/lobby.component';
+import { EnterLobbyComponent } from './enter-lobby/enter-lobby.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { LobbyComponent } from './lobby/lobby.component';
     CellfloatDirective,
     RotateOnScrollDirective,
     ParallaxDirective,
-    LobbyComponent
+    LobbyComponent,
+    EnterLobbyComponent
   ],
   imports: [
     BrowserModule,
