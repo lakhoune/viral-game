@@ -7,9 +7,15 @@ import { Component, OnInit } from '@angular/core';
 })
 export class EnterLobbyComponent implements OnInit {
 
+    title:string ="Title";
+    pin:number =1213;
+    size:number =8;
+    
+    
   constructor() { }
 
   ngOnInit() {
   }
 
 }
+ 

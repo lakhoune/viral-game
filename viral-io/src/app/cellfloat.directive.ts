@@ -1,4 +1,5 @@
 import { Directive } from '@angular/core';
+import * as $ from 'jquery';
 
 @Directive({
   selector: '[appCellfloat]'
