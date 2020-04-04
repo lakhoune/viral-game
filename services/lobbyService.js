@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const Lobby = require("../models/Lobby");
 const Participant = require("../models/Participant");
 
+//Service to manage lobby
 module.exports = function lobbyService() {
   lobbyService.createLobby = (lobbySize, callback) => {
     //implement
@@ -39,7 +40,7 @@ module.exports = function lobbyService() {
     // .
     callback(/*true if lobby is found*/);
   };
-  lobbyService.close = lobbyId => {
+  lobbyService.close = (lobbyId) => {
     //implement
     // .
     // .remove the Lobby from the database

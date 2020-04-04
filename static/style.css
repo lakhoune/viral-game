@@ -4,12 +4,11 @@ body {
   position: relative;
 }
 p {
-  height: 90%;
+  height: 85%;
   overflow: auto;
 }
-input {
+#txt {
   height: 40px;
   width: 100%;
   position: absolute;
-  margin-bottom: 10px;
 }
