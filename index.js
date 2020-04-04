@@ -42,9 +42,11 @@ game.on("connection", (socket) => {
 
   socket.on("createLobby", (lobbySize) => {
     lobbyId = "1234";
-    socket.join(lobbyId);
-    lobbies.push({ id: lobbyId, size: lobbySize });
-    socket.emit("log", "Created lobby, lobby id: " + lobbyId);
+    socket.join(lobbyId, () => {
+      lobbies.push({ id: lobbyId, size: lobbySize });
+      socket.emit("log", "Created lobby, lobby id: " + lobbyId);
+    });
+
     // services.lobby.createLobby(lobbySize, (lobbyId) => {
     //   lobbies.push(lobbyId);
     //   services.lobby.addToLobby(lobbyId, socket.id, (result) => {
@@ -59,35 +61,56 @@ game.on("connection", (socket) => {
     //create socket io room
   });
 
-  socket.on("joinLobby", (lobbyId) => {
+  function getLobby(lobbies, id, callback) {
     lobbies.forEach((lobby) => {
-      console.log(game.in(lobbyId).clients.length < lobby.size);
-      if (lobby.id == lobbyId && game.in(lobbyId).clients.length < lobby.size) {
-        socket.join(lobbyId, () => {
-          socket.broadcast.to(lobbyId).emit("log", "Member joined lobby ");
-          socket.emit("log", "Joined lobby " + lobbyId);
-          game
-            .in(lobbyId)
-            .emit("log", "LobbySize: " + game.in(lobbyId).clients.length); //Bug here: lobbysize not updating
+      if (lobby.id == id) {
+        callback(lobby);
+      }
+    });
+  }
+
+  socket.on("joinLobby", (lobbyId) => {
+    getLobby(lobbies, lobbyId, (lobby) => {
+      console.log(lobby);
+      if (lobby) {
+        console.log("lobby");
+        game.in(lobbyId).clients((err, clients) => {
+          clients.forEach((client) => {
+            if (client == socket.id) {
+              console.log("duplicate");
+              return;
+            }
+          });
+
+          var currSize;
+          currSize = clients.length;
+          console.log(currSize);
+          if (currSize < lobby.size) {
+            socket.join(lobbyId, () => {
+              currSize++;
+              socket.currLobby = lobbyId;
+              socket.broadcast.to(lobbyId).emit("log", "Member joined lobby ");
+              socket.emit("log", "Joined lobby " + lobbyId);
+              game.to(lobbyId).emit("log", "LobbySize: " + currSize); //Bug here: lobbysize not updating correctly
+            });
+            return;
+          } else {
+            socket.emit("error", { msg: "Lobby full", value: lobbyId });
+          }
         });
-        return;
       }
     });
   });
 
-  //  socket.on("setName", (participantId, lobbyId, name) => {
-  // if (lobbies.includes(lobbyId)) {
-  //   services.participant.setName(participantId, name, (result) => {
-  //     if (result) {
-  //       io.to(lobbyId).emit("log", name + " joined he lobby");
-  //       socket.name = name;
-  //     }
-  //   });
-  // } else {
-  //   socket.emit("error", { msg: "Lobby non existant", value: lobbyId });
-  // }
-  //  });
-  //set name and create participant inside room
+  socket.on("setName", (lobbyId, name) => {
+    var lobby = getLobby(lobbies, lobbyId);
+    if (!socket.name && lobby && socket.currLobby == lobby.id) {
+      socket.broadcast.to(lobbyId).emit("log", "say hi to " + name);
+      socket.name = name;
+    } else {
+      socket.emit("error", { msg: "Lobby non existant", value: lobbyId });
+    }
+  });
 });
 
 //chat only for testing
