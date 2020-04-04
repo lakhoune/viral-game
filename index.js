@@ -68,34 +68,40 @@ game.on("connection", (socket) => {
       }
     });
   }
-
+  function checkDuplicate(clients, socketId) {
+    for (var i = 0; i < clients.length; i++) {
+      let client = clients[i];
+      if (client == socketId) {
+        return true;
+      }
+    }
+    return false;
+  }
   socket.on("joinLobby", (lobbyId) => {
     getLobby(lobbies, lobbyId, (lobby) => {
       console.log(lobby);
       if (lobby) {
         console.log("lobby");
         game.in(lobbyId).clients((err, clients) => {
-          clients.forEach((client) => {
-            if (client == socket.id) {
-              console.log("duplicate");
-              return;
-            }
-          });
+          if (!checkDuplicate(clients, socket.id)) {
+            var currSize;
+            currSize = clients.length;
 
-          var currSize;
-          currSize = clients.length;
-          console.log(currSize);
-          if (currSize < lobby.size) {
-            socket.join(lobbyId, () => {
-              currSize++;
-              socket.currLobby = lobbyId;
-              socket.broadcast.to(lobbyId).emit("log", "Member joined lobby ");
-              socket.emit("log", "Joined lobby " + lobbyId);
-              game.to(lobbyId).emit("log", "LobbySize: " + currSize); //Bug here: lobbysize not updating correctly
-            });
-            return;
-          } else {
-            socket.emit("error", { msg: "Lobby full", value: lobbyId });
+            if (currSize < lobby.size) {
+              socket.join(lobbyId, () => {
+                currSize++;
+                console.log(currSize);
+                socket.currLobby = lobbyId;
+                socket.broadcast
+                  .to(lobbyId)
+                  .emit("log", "Member joined lobby ");
+                socket.emit("log", "Joined lobby " + lobbyId);
+                game.to(lobbyId).emit("log", "LobbySize: " + currSize); //Bug here: lobbysize not updating correctly
+              });
+              return;
+            } else {
+              socket.emit("err", "Lobby full");
+            }
           }
         });
       }
