@@ -3,6 +3,7 @@
 module.exports = function lobbyService() {
   const Lobby = require("../models/Lobby");
   var lobbies = [];
+  const LobbySizes = [4, 6, 8];
 
   function getLobby(id) {
     for (let i = 0; i < lobbies.length; i++) {
@@ -15,10 +16,9 @@ module.exports = function lobbyService() {
   function checkLobbyId(id) {
     for (let i = 0; i < lobbies.length; i++) {
       if (lobbies[i].id == id) {
-        return false;
+        throw new Error("lobby id already taken");
       }
     }
-    return true;
   }
 
   function removeParticipant(socket, lobby) {
@@ -45,21 +45,31 @@ module.exports = function lobbyService() {
     }
   }
 
+  function checkSize(size) {
+    if (!LobbySizes.includes(size)) {
+      throw new Error(
+        "Size of " + size + " not supported, supported sizes are: " + LobbySizes
+      );
+    }
+  }
+
   //exported service functions
   lobbyService.createLobby = (socket, lobbySize, id, callback) => {
-    if (socket.currLobby) {
-      callback("already in a lobby", false);
-      return;
-    }
-    let lobbyId;
-    if (typeof id == String) {
-      lobbyId = id.toString();
-    } else {
-      lobbyId = id;
-    }
-    if (!checkLobbyId(lobbyId)) {
-      callback("lobby non existant", false);
-    } else {
+    try {
+      if (socket.currLobby) {
+        throw new Error("already in a lobby");
+      }
+      checkSize(lobbySize);
+
+      let lobbyId;
+      if (typeof id == String) {
+        lobbyId = id.toString();
+      } else {
+        lobbyId = id;
+      }
+
+      checkLobbyId(lobbyId);
+
       socket.join(lobbyId, () => {
         var lobby = new Lobby(lobbyId, lobbySize);
         lobby.participants.push(socket.id);
@@ -67,6 +77,8 @@ module.exports = function lobbyService() {
         lobbies.push(lobby);
         callback(false, lobby);
       });
+    } catch (err) {
+      callback(err.message, false);
     }
   };
 
