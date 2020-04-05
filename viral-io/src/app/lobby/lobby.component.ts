@@ -2,6 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import 'jquery-ui-dist/jquery-ui.js';
 
+import {ElementRef } from '@angular/core';
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { HostListener} from "@angular/core";
+import {  HostBinding } from '@angular/core';
+
 @Component({
   selector: 'app-lobby',
   templateUrl: './lobby.component.html',
@@ -15,18 +22,20 @@ export class LobbyComponent implements OnInit {
     
 
 
-  constructor() { document.body.style.height ="100%";}
+constructor() { document.body.style.height ="100%";document.body.style.backgroundColor ="rgba(226,176,255,0.4)"; }
 
   ngOnInit() {
       
           $(document).ready(function(){
     animateDiv('.a');
-    animateDiv('.b');
-   animateDiv('.c');
-   animateDiv('.d');
-    animateDiv('.e');
-              animateDiv('.f');
-              animateDiv('.g');
+    setTimeout(function(){animateDiv('.b');}, Math.floor(Math.random() * 4000));
+               setTimeout(function(){animateDiv('.c');}, Math.floor(Math.random() * 3200));
+               setTimeout(function(){animateDiv('.d');}, Math.floor(Math.random() * 5340));
+               setTimeout(function(){animateDiv('.e');}, Math.floor(Math.random() * 900));
+               setTimeout(function(){animateDiv('.f');}, Math.floor(Math.random() * 2503));
+               setTimeout(function(){animateDiv('.g');}, Math.floor(Math.random() * 3954));
+              setTimeout(function(){animateDiv('.h');}, Math.floor(Math.random() * 1034));
+  
 });
 
 function makeNewPosition(){
@@ -46,11 +55,20 @@ function makeNewPosition(){
 
 function animateDiv(myclass){
     var newq = makeNewPosition();
-$(myclass).animate({ top: newq[0], left: newq[1] }, 2000, "easeInQuad",  function(){
+   //document.getElementsByClassName('.a').style.transform = "rotate(90deg)";
+
+$(myclass).animate({ top: newq[0], left: newq[1]}, 5000, "easeInOutBounce",  function(){
+        
       animateDiv(myclass);        
     });
     
 };
+    
   }
+    
+      
+  
+    
+
 
 }
