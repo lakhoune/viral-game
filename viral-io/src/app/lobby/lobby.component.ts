@@ -29,9 +29,9 @@ constructor() { document.body.style.height ="100%";document.body.style.backgroun
           $(document).ready(function(){
     animateDiv('.a');
     setTimeout(function(){animateDiv('.b');}, Math.floor(Math.random() * 4000));
-               setTimeout(function(){animateDiv('.c');}, Math.floor(Math.random() * 3200));
+               setTimeout(function(){animateDiv('.c');}, Math.floor(Math.random() * 13200));
                setTimeout(function(){animateDiv('.d');}, Math.floor(Math.random() * 5340));
-               setTimeout(function(){animateDiv('.e');}, Math.floor(Math.random() * 900));
+               setTimeout(function(){animateDiv('.e');}, Math.floor(Math.random() * 2900));
                setTimeout(function(){animateDiv('.f');}, Math.floor(Math.random() * 2503));
                setTimeout(function(){animateDiv('.g');}, Math.floor(Math.random() * 3954));
               setTimeout(function(){animateDiv('.h');}, Math.floor(Math.random() * 1034));
@@ -57,9 +57,9 @@ function animateDiv(myclass){
     var newq = makeNewPosition();
    //document.getElementsByClassName('.a').style.transform = "rotate(90deg)";
 
-$(myclass).animate({ top: newq[0], left: newq[1]}, 5000, "easeInOutBounce",  function(){
+$(myclass).animate({ top: newq[0], left: newq[1]}, 5500, "easeInOutBounce",  function(){
         
-      animateDiv(myclass);        
+    setTimeout(function(){animateDiv(myclass);},Math.floor(Math.random() * 1000) );        
     });
     
 };
