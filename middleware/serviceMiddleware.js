@@ -1,9 +1,10 @@
 const services = require("../services");
 
 function serviceMiddleware() {
-  return function(req, res, next) {
-    req.services = services;
+  return (socket, next) => {
+    socket.services = services;
     next();
   };
 }
+
 module.exports = serviceMiddleware;

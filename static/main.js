@@ -25,6 +25,12 @@ window.onload = () => {
     output.innerHTML += msg + "<br>";
     console.log(msg);
   });
+  gameSocket.on("err", (msg) => {
+    console.log(msg);
+    output.innerHTML +=
+      "<strong style='color:red'>" + msg + "</strong>" + "<br>";
+    console.log(msg);
+  });
 
   adminChat.on("chat", (data) => {
     output.innerHTML += data + "<br>";

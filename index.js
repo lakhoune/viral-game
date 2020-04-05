@@ -19,8 +19,6 @@ const app = express();
 //   console.log("Database connection successfull");
 // });
 
-var lobbies = [];
-
 //Express server
 const server = app.listen(80, () => {
   console.log("listening on 80");
@@ -29,93 +27,54 @@ const server = app.listen(80, () => {
 //Static Files -- this is only for testing this will later point to the built angular app
 app.use(express.static("static"));
 
-//Service Middleware
-app.use(require("./middleware/serviceMiddleware")());
-
 const io = socket(server);
+
+//Namespaces
 const chat = io.of("/admin");
 const game = io.of("/game");
+//Service Middleware
+game.use(require("./middleware/serviceMiddleware")());
 
 game.on("connection", (socket) => {
   console.log(socket.id, " connected");
   socket.emit("log", "Successfully connected, socket id: " + socket.id);
 
-  socket.on("createLobby", (lobbySize) => {
-    lobbyId = "1234";
-    socket.join(lobbyId, () => {
-      lobbies.push({ id: lobbyId, size: lobbySize });
-      socket.emit("log", "Created lobby, lobby id: " + lobbyId);
-    });
-
-    // services.lobby.createLobby(lobbySize, (lobbyId) => {
-    //   lobbies.push(lobbyId);
-    //   services.lobby.addToLobby(lobbyId, socket.id, (result) => {
-    //     if (result) {
-    //       //create socket io room
-    //       //let creator join the room
-    //       socket.join(lobbyId);
-    //       socket.emit("log", "Created lobby, loby id: " + lobbyId);
-    //     }
-    //   });
-    //});
-    //create socket io room
-  });
-
-  function getLobby(lobbies, id, callback) {
-    lobbies.forEach((lobby) => {
-      if (lobby.id == id) {
-        callback(lobby);
-      }
-    });
-  }
-  function checkDuplicate(clients, socketId) {
-    for (var i = 0; i < clients.length; i++) {
-      let client = clients[i];
-      if (client == socketId) {
-        return true;
-      }
-    }
-    return false;
-  }
-  socket.on("joinLobby", (lobbyId) => {
-    getLobby(lobbies, lobbyId, (lobby) => {
-      console.log(lobby);
+  socket.on("createLobby", (lobbySize) =>
+    socket.services.lobby.createLobby(socket, lobbySize, (lobby) => {
       if (lobby) {
-        console.log("lobby");
-        game.in(lobbyId).clients((err, clients) => {
-          if (!checkDuplicate(clients, socket.id)) {
-            var currSize;
-            currSize = clients.length;
+        socket.emit("log", "Created lobby, lobby id: " + lobby.id);
+      } else {
+        console.log("error");
+      }
+    })
+  );
 
-            if (currSize < lobby.size) {
-              socket.join(lobbyId, () => {
-                currSize++;
-                console.log(currSize);
-                socket.currLobby = lobbyId;
-                socket.broadcast
-                  .to(lobbyId)
-                  .emit("log", "Member joined lobby ");
-                socket.emit("log", "Joined lobby " + lobbyId);
-                game.to(lobbyId).emit("log", "LobbySize: " + currSize); //Bug here: lobbysize not updating correctly
-              });
-              return;
-            } else {
-              socket.emit("err", "Lobby full");
-            }
-          }
-        });
+  socket.on("joinLobby", (lobbyId) => {
+    socket.services.lobby.joinLobby(socket, lobbyId, (err, lobby) => {
+      if (err) {
+        console.log(err);
+        socket.emit("err", err.message);
+      } else {
+        socket.broadcast.to(lobby.id).emit("log", "Member joined lobby ");
+        socket.emit("log", "Joined lobby " + lobby.id);
+        game
+          .to(lobbyId)
+          .emit("log", "Lobby size: " + lobby.participants.length);
       }
     });
   });
 
-  socket.on("setName", (lobbyId, name) => {
-    var lobby = getLobby(lobbies, lobbyId);
-    if (!socket.name && lobby && socket.currLobby == lobby.id) {
-      socket.broadcast.to(lobbyId).emit("log", "say hi to " + name);
-      socket.name = name;
-    } else {
-      socket.emit("error", { msg: "Lobby non existant", value: lobbyId });
-    }
+  socket.on("setName", (name) => {
+    socket.services.lobby.setName(socket, name, (err, name) => {
+      if (err) {
+        socket.emit("err", err);
+      } else {
+        socket.emit("log", "name set to: " + name);
+        socket.broadcast
+          .to(socket.currLobby)
+          .emit("log", "Member joined lobby ");
+      }
+    });
   });
 });
 

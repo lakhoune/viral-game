@@ -2,5 +2,4 @@
 // the right config
 module.exports = {
   lobby: require("./lobbyService")(),
-  participant: require("./participantService")()
 };

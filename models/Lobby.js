@@ -1,18 +1,11 @@
-const mongoose = require("mongoose");
+module.exports = class Lobby {
+  id;
+  capacity;
+  participants;
 
-const LobbySchema = new mongoose.Schema({
-  id: {
-    type: String,
-    required: false //false because we will assign it after creation
-  },
-  size: {
-    type: Number,
-    required: true
-  },
-  participants: {
-    type: [String],
-    required: false
+  constructor(id, capacity) {
+    this.id = id;
+    this.capacity = capacity;
+    this.participants = [];
   }
-});
-
-mongoose.model("Lobby", LobbySchema);
+};
