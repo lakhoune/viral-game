@@ -1,7 +1,6 @@
 //Service to manage lobby
 
 module.exports = function lobbyService() {
-  //const game = io.of("/game");
   const Lobby = require("../models/Lobby");
   var lobbies = [];
 
@@ -13,7 +12,14 @@ module.exports = function lobbyService() {
     }
     throw new Error("lobby non-existant");
   }
-
+  function removeParticipant(socketId, lobby) {
+    for (var i = 0; i < lobby.participants.length; i++) {
+      if (lobby.participants[i] == socketId) {
+        lobby.participants.splice(i, 1);
+        return;
+      }
+    }
+  }
   function checkDuplicate(participants, socketId) {
     for (var i = 0; i < participants.length; i++) {
       let tmp = participants[i];
@@ -23,30 +29,26 @@ module.exports = function lobbyService() {
     }
   }
 
-  // function getClients(lobbyId, callback) {
-  //   game.in(lobbyId).clients((err, clients) => {
-  //     if (err) {
-  //       throw err;
-  //     } else {
-  //       callback(clients);
-  //     }
-  //   });
-  // }
   function checkFreeSpace(lobby) {
     if (lobby.participants >= lobby.capacity) {
       throw new Error("lobby full");
     }
   }
 
-  //exportet service functions
-  lobbyService.createLobby = (socket, lobbySize, callback) => {
-    lobbyId = "1234";
+  //exported service functions
+  lobbyService.createLobby = (socket, lobbySize, id, callback) => {
+    let lobbyId;
+    if (typeof id == String) {
+      lobbyId = id.toString();
+    } else {
+      lobbyId = id;
+    }
+
     socket.join(lobbyId, () => {
       var lobby = new Lobby(lobbyId, lobbySize);
       lobby.participants.push(socket.id);
       socket.currLobby = lobbyId;
       lobbies.push(lobby);
-      console.log("created lobby, current lobbies: \n", lobbies);
       callback(lobby);
     });
   };
@@ -63,7 +65,6 @@ module.exports = function lobbyService() {
         callback(false, lobby);
       });
     } catch (err) {
-      console.log(err);
       callback(err, false);
     }
   };
@@ -82,12 +83,16 @@ module.exports = function lobbyService() {
       callback(err, false);
     }
   };
-  lobbyService.removeFromLobby = (socketId, callback) => {
-    //implement
-    // .
-    // .
-    // .
-    callback(/*true if success*/);
+  lobbyService.removeFromLobby = (socket, callback) => {
+    if (socket.currLobby) {
+      try {
+        var lobby = getLobby(socket.currLobby);
+        removeParticipant(socket.id, lobby);
+        callback(false);
+      } catch (err) {
+        callback(err);
+      }
+    }
   };
 
   lobbyService.checkLobbyId = (lobbyId, callback) => {

@@ -39,20 +39,19 @@ game.on("connection", (socket) => {
   console.log(socket.id, " connected");
   socket.emit("log", "Successfully connected, socket id: " + socket.id);
 
-  socket.on("createLobby", (lobbySize) =>
-    socket.services.lobby.createLobby(socket, lobbySize, (lobby) => {
+  socket.on("createLobby", (id, size) => {
+    socket.services.lobby.createLobby(socket, size, id, (lobby) => {
       if (lobby) {
         socket.emit("log", "Created lobby, lobby id: " + lobby.id);
       } else {
         console.log("error");
       }
-    })
-  );
+    });
+  });
 
   socket.on("joinLobby", (lobbyId) => {
     socket.services.lobby.joinLobby(socket, lobbyId, (err, lobby) => {
       if (err) {
-        console.log(err);
         socket.emit("err", err.message);
       } else {
         socket.broadcast.to(lobby.id).emit("log", "Member joined lobby ");
@@ -72,9 +71,21 @@ game.on("connection", (socket) => {
         socket.emit("log", "name set to: " + name);
         socket.broadcast
           .to(socket.currLobby)
-          .emit("log", "Member joined lobby ");
+          .emit("log", name + " joined lobby ");
       }
     });
+  });
+
+  socket.on("disconnect", (data) => {
+    let tmp = socket.currLobby;
+    if (data == "transport close") {
+      socket.services.lobby.removeFromLobby(socket, (err) => {
+        if (err) {
+          console.log(err);
+        }
+        socket.broadcast.to(tmp).emit("log", "Member left lobby ");
+      });
+    }
   });
 });
 
