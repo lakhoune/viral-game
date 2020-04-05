@@ -15,7 +15,8 @@ window.onload = () => {
   });
 
   create.addEventListener("click", () => {
-    gameSocket.emit("createLobby", "1234", 4);
+    rand = Math.floor(Math.random() * 10000);
+    gameSocket.emit("createLobby", rand, 4);
   });
   join.addEventListener("click", () => {
     gameSocket.emit("joinLobby", lobbyId.value);

@@ -40,11 +40,11 @@ game.on("connection", (socket) => {
   socket.emit("log", "Successfully connected, socket id: " + socket.id);
 
   socket.on("createLobby", (id, size) => {
-    socket.services.lobby.createLobby(socket, size, id, (lobby) => {
-      if (lobby) {
-        socket.emit("log", "Created lobby, lobby id: " + lobby.id);
+    socket.services.lobby.createLobby(socket, size, id, (err, lobby) => {
+      if (err) {
+        socket.emit("err", err);
       } else {
-        console.log("error");
+        socket.emit("log", "Created lobby, lobby id: " + lobby.id);
       }
     });
   });
