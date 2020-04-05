@@ -7,11 +7,17 @@ const sqlite3 = require('sqlite3').verbose();
     
 
     exports.getWords = function getWords(num,callback){ 
+        
+        
+       console.log(num);
+        
+        wrds =[];
+
 
         console.log("lerooooyyy"); 
         
         
-        var sql =`SELECT word FROM wordList WHERE uuid = 7`;
+        var sql =`SELECT word FROM wordList ORDER BY random() LIMIT `+num+``;
 
         let db = new sqlite3.Database('../sqlite-db/words.db');
         
@@ -33,7 +39,8 @@ const sqlite3 = require('sqlite3').verbose();
             if(rows){
 
                 //console.log(rows);
-                jay=rows.word;
+                jay=rows;
+                wrds.push(rows.word);
                
                 
                 //console.log(jay);
@@ -45,7 +52,7 @@ const sqlite3 = require('sqlite3').verbose();
 
           
 
-        },function(){db.close();callback(jay);});
+        },function(){db.close();callback(wrds);});
 
 
         
