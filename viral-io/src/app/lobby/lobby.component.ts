@@ -41,7 +41,7 @@ constructor() { document.body.style.height ="100%";document.body.style.backgroun
 function makeNewPosition(){
     
     // Get viewport dimensions (remove the dimension of the div)
-    var h = $(window).height()-150;
+    var h = $(window).height()-100;
     var w = $(window).width() - 100;
     
     var nh = Math.floor(Math.random() * h);
