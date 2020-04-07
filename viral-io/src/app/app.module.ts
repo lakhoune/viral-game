@@ -13,6 +13,9 @@ import { ParallaxDirective } from './parallax.directive';
 import {SocketioService} from './socketio.service';
 import { LobbyComponent } from './lobby/lobby.component';
 import { EnterLobbyComponent } from './enter-lobby/enter-lobby.component';
+import { GDPRComponent } from './gdpr/gdpr.component';
+import { GameboardComponent } from './gameboard/gameboard.component';
+import { CellComponent } from './cell/cell.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +28,10 @@ import { EnterLobbyComponent } from './enter-lobby/enter-lobby.component';
     RotateOnScrollDirective,
     ParallaxDirective,
     LobbyComponent,
-    EnterLobbyComponent
+    EnterLobbyComponent,
+    GDPRComponent,
+    GameboardComponent,
+    CellComponent
   ],
   imports: [
     BrowserModule,
