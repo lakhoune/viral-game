@@ -24,7 +24,7 @@ export class RotateOnScrollDirective {
 onWindowScroll() {
   document.getElementById("rotate").style.transform = "rotate("+angle+"deg)";
     angle=angle + 0.4;
-    console.log(angle);
+    //console.log(angle);
 }
     
 }

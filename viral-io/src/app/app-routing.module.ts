@@ -9,7 +9,7 @@ import{GDPRComponent} from './gdpr/gdpr.component';
 const routes: Routes = [
     
         {   path: '',
-            redirectTo: '/gdpr',
+            redirectTo: '/home',
             pathMatch: 'full'
         },
         {path: 'home', component:HomepageComponent},
