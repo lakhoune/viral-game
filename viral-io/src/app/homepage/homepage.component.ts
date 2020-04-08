@@ -7,6 +7,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HostListener } from "@angular/core";
 import { HostBinding } from '@angular/core';
+import { ReactiveFormsModule ,NgForm} from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import {
   trigger,
   state,
@@ -21,7 +23,8 @@ import {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+      FormsModule
   ],
   declarations: [ ],
   bootstrap: [ ]
@@ -48,6 +51,9 @@ import {
   ]
 })
 export class HomepageComponent implements OnInit {
+
+    pinCODE;
+    
 playButton :boolean = false;
 players :boolean = true;
   constructor(private socketService: SocketioService) { }
@@ -67,6 +73,9 @@ newLobby(){
 createLobby(size:number){
     this.socketService.createLobby(size);
     
+}  
+enterLobby(pin:number){
+    this.socketService.joinLobby(pin);
 }    
 
 
