@@ -3,7 +3,7 @@
     <h4>{{size}} Spieler</h4>
 
     <div style="width: 300px; margin: auto; height: 70px; border: 3px solid; border-radius: 25px; border-color: rgb(60,60,60);">
-        <h1 style="line-height: 70px; color: rgba(60,60,60)">#{{pin}}</h1>
+        <h1 style="line-height: 70px; color: rgba(60,60,60)">#{{getPin()}}</h1>
     </div>
 
 
@@ -22,7 +22,7 @@
     </div>
 
 
-    <div routerLink="/lobby/1337" routerLinkActive="active" style="width: 300px; margin: auto; background-color:; margin-top: 25px; margin-bottom: 25px;">
+    <div routerLink="/lobby/{{size}}/1337" routerLinkActive="active" style="width: 300px; margin: auto; background-color:; margin-top: 25px; margin-bottom: 25px;">
         <div style="display: inline-block;  width: 50px; height: 50px; background-color:; margin: auto; background-image: url(../../assets/play.svg);" >
             <h5 style="visibility: hidden; line-height: 50px; margin: auto;">.</h5>
         </div>

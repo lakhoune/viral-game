@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import {SocketioService} from '../socketio.service';
 import { Directive } from '@angular/core';
 import {ElementRef } from '@angular/core';
 import { NgModule } from '@angular/core';
@@ -50,10 +50,10 @@ import {
 export class HomepageComponent implements OnInit {
 playButton :boolean = false;
 players :boolean = true;
-  constructor() { }
+  constructor(private socketService: SocketioService) { }
 
   ngOnInit() {
-     
+    // this.socketService.joinLobby(8848);
   }
    
 newLobby(){
@@ -65,6 +65,7 @@ newLobby(){
 }
    
 createLobby(size:number){
+    this.socketService.createLobby(size);
     
 }    
 

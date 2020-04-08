@@ -13,8 +13,8 @@ const routes: Routes = [
             pathMatch: 'full'
         },
         {path: 'home', component:HomepageComponent},
-    {path: 'lobby/:id', component:LobbyComponent},
-    {path: 'enter-lobby/:id', component:EnterLobbyComponent},
+    {path: 'lobby/:size/:lobby', component:LobbyComponent},
+    {path: 'enter-lobby/:size', component:EnterLobbyComponent},
     {path: 'gdpr', component:GDPRComponent}
 ];
 

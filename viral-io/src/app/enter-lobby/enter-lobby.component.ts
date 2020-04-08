@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-
+import { Router, ActivatedRoute, ParamMap } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
+import {SocketioService} from '../socketio.service';
 @Component({
   selector: 'app-enter-lobby',
   templateUrl: './enter-lobby.component.html',
@@ -8,14 +10,28 @@ import { Component, OnInit } from '@angular/core';
 export class EnterLobbyComponent implements OnInit {
 
     title:string ="Title";
-    pin:number =1213;
-    size:number =8;
+    pin;
+    size;
     
     
-  constructor() { }
+  constructor(  private route: ActivatedRoute,
+  private router: Router) { }
 
   ngOnInit() {
+      
+      let id = this.route.snapshot.paramMap.get('size');
+   // console.log(id);
+    this.size=id;
+      
+    
+    this.pin=SocketioService.lobbyID;
+      
+    //console.log(this.size)
   }
+    
+    
+getPin(){return SocketioService.lobbyID;}
+    
 
 }
  

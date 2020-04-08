@@ -4,7 +4,9 @@
 
 export const environment = {
   production: false,
-  SOCKET_ENDPOINT: 'http://localhost:80/game'
+  SOCKET_ENDPOINT: 'http://localhost:80/game',
+  SOCKET_ADMIN_ENDPOINT: 'http://localhost:80/admin',
+    
 };
 
 /*
