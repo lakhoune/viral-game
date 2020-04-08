@@ -5,14 +5,6 @@ module.exports = function lobbyService() {
   var lobbies = [];
   const LobbySizes = [4, 6, 8];
 
-  function getLobby(id) {
-    for (let i = 0; i < lobbies.length; i++) {
-      if (lobbies[i].id == id) {
-        return lobbies[i];
-      }
-    }
-    throw new Error("lobby non-existant");
-  }
   function checkLobbyId(id) {
     for (let i = 0; i < lobbies.length; i++) {
       if (lobbies[i].id == id) {
@@ -52,8 +44,27 @@ module.exports = function lobbyService() {
       );
     }
   }
-
+  function getLobby(id) {
+    for (let i = 0; i < lobbies.length; i++) {
+      if (lobbies[i].id == id) {
+        return lobbies[i];
+      }
+    }
+    throw new Error("lobby non-existant");
+  }
   //exported service functions
+  lobbyService.getLobbySize = (socket, callback) => {
+    try {
+      if (!socket.currLobby) {
+        throw new Error("currently not in a lobby");
+      }
+      let lobby = getLobby(socket.currLobby);
+      callback(false, lobby.capacity);
+    } catch (error) {
+      callback(error, false);
+    }
+  };
+
   lobbyService.createLobby = (socket, lobbySize, id, callback) => {
     try {
       if (socket.currLobby) {

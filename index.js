@@ -76,6 +76,15 @@ game.on("connection", (socket) => {
     });
   });
 
+  socket.on("getLobbySize", () => {
+    socket.services.lobby.getLobbySize(socket, (err, capacity) => {
+      if (err) {
+        socket.emit("err", err);
+      } else {
+        socket.emit("data", capacity);
+      }
+    });
+  });
   socket.on("disconnect", (data) => {
     let tmp = socket.currLobby;
     if (data == "transport close") {
