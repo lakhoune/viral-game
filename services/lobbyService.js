@@ -2,6 +2,8 @@
 
 module.exports = function lobbyService() {
   const Lobby = require("../models/Lobby");
+  const Participant = require("../models/Participant");
+  const io = require("socket.io")();
   var lobbies = [];
   const LobbySizes = [4, 6, 8];
 
@@ -14,21 +16,26 @@ module.exports = function lobbyService() {
   }
 
   function removeParticipant(socket, lobby) {
+    //only remove the socketId
     for (var i = 0; i < lobby.participants.length; i++) {
-      if (lobby.participants[i] == socket.id) {
-        lobby.participants.splice(i, 1);
+      if (lobby.participants[i].socketId == socket.id) {
+        lobby.participants[i].socketId = null;
+        lobby.participants[i].status = "disconnected";
         socket.currLobby = false;
         return;
       }
     }
   }
-  function checkDuplicate(participants, socketId) {
-    for (var i = 0; i < participants.length; i++) {
-      let tmp = participants[i];
-      if (tmp == socketId) {
-        throw new Error("ducplicate joining");
-      }
-    }
+  async function checkDuplicate(lobbyId, socketId) {
+    io.of("/game")
+      .in(lobbyId)
+      .clients((error, clients) => {
+        if (error) throw error;
+        console.log(clients);
+        for (const client of clients) {
+          if (client == socketId) throw new Error("duplicate joining process");
+        }
+      });
   }
 
   function checkFreeSpace(lobby) {
@@ -52,6 +59,14 @@ module.exports = function lobbyService() {
     }
     throw new Error("lobby non-existant");
   }
+  function removeLobby(lobbyId) {
+    for (let i = 0; i < lobbies.length; i++) {
+      if (lobbies[i].id == lobbyId) {
+        lobbies.slice(i, 1);
+      }
+    }
+  }
+
   //exported service functions
   lobbyService.getLobbySize = (socket, callback) => {
     try {
@@ -83,15 +98,15 @@ module.exports = function lobbyService() {
       var lobby = new Lobby(lobbyId, lobbySize);
       lobbies.push(lobby);
 
-      this.joinLobby(socket, lobbyId, (err, lobby) => {
+      lobbyService.joinLobby(socket, lobbyId, (err, lobby, sessionId) => {
         if (err) {
           throw err;
         } else {
-          callback(false, lobby);
+          callback(false, lobby, sessionId);
         }
       });
     } catch (err) {
-      callback(err.message, false);
+      callback(err.message, false, false);
     }
   };
 
@@ -101,16 +116,18 @@ module.exports = function lobbyService() {
         throw new Error("already in a lobby");
       }
       var lobby = getLobby(lobbyId);
-      checkDuplicate(lobby.participants, socket.id);
+      checkDuplicate(lobby.id, socket.id);
       checkFreeSpace(lobby);
 
+      let participant = new Participant(socket.id);
+
       socket.join(lobbyId, () => {
-        lobby.participants.push(socket.id);
+        lobby.participants.push(participant);
         socket.currLobby = lobbyId;
-        callback(false, lobby);
+        callback(false, lobby, participant.sessionId);
       });
     } catch (err) {
-      callback(err, false);
+      callback(err, false, false);
     }
   };
 
@@ -130,8 +147,11 @@ module.exports = function lobbyService() {
   };
 
   lobbyService.close = (lobbyId) => {
-    console.log("closing empty lobby in 10 seconds");
-    setTimeout(() => console.log(lobbyId + " closed"), 10000);
+    console.log("closing empty lobby in 5 minutes");
+    setTimeout(() => {
+      console.log(lobbyId + " closed");
+      removeLobby(lobbyId);
+    }, 300000);
   };
 
   lobbyService.removeFromLobby = (socket, callback) => {

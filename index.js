@@ -40,27 +40,38 @@ game.on("connection", (socket) => {
   socket.emit("log", "Successfully connected, socket id: " + socket.id);
 
   socket.on("createLobby", (id, size) => {
-    socket.services.lobby.createLobby(socket, size, id, (err, lobby) => {
-      if (err) {
-        socket.emit("err", err);
-      } else {
-        socket.emit("log", "Created lobby, lobby id: " + lobby.id);
+    socket.services.lobby.createLobby(
+      socket,
+      size,
+      id,
+      (err, lobby, sessionId) => {
+        if (err) {
+          socket.emit("err", err);
+        } else {
+          socket.emit("log", "Created lobby, lobby id: " + lobby.id);
+          socket.emit("log", "Got session id:" + sessionId);
+        }
       }
-    });
+    );
   });
 
   socket.on("joinLobby", (lobbyId) => {
-    socket.services.lobby.joinLobby(socket, lobbyId, (err, lobby) => {
-      if (err) {
-        socket.emit("err", err.message);
-      } else {
-        socket.broadcast.to(lobby.id).emit("log", "Member joined lobby ");
-        socket.emit("log", "Joined lobby " + lobby.id);
-        game
-          .to(lobbyId)
-          .emit("log", "Lobby size: " + lobby.participants.length);
+    socket.services.lobby.joinLobby(
+      socket,
+      lobbyId,
+      (err, lobby, sessionId) => {
+        if (err) {
+          socket.emit("err", err.message);
+        } else {
+          socket.broadcast.to(lobby.id).emit("log", "Member joined lobby ");
+          socket.emit("log", "Joined lobby " + lobby.id);
+          socket.emit("log", "Got session id: " + sessionId);
+          game
+            .to(lobbyId)
+            .emit("log", "Lobby size: " + lobby.participants.length);
+        }
       }
-    });
+    );
   });
 
   socket.on("setName", (name) => {
