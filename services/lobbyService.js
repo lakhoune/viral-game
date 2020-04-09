@@ -73,20 +73,22 @@ module.exports = function lobbyService() {
       checkSize(lobbySize);
 
       let lobbyId;
-      if (typeof id == String) {
+      if (typeof id != String) {
         lobbyId = id.toString();
       } else {
         lobbyId = id;
       }
 
       checkLobbyId(lobbyId);
+      var lobby = new Lobby(lobbyId, lobbySize);
+      lobbies.push(lobby);
 
-      socket.join(lobbyId, () => {
-        var lobby = new Lobby(lobbyId, lobbySize);
-        lobby.participants.push(socket.id);
-        socket.currLobby = lobbyId;
-        lobbies.push(lobby);
-        callback(false, lobby);
+      this.joinLobby(socket, lobbyId, (err, lobby) => {
+        if (err) {
+          throw err;
+        } else {
+          callback(false, lobby);
+        }
       });
     } catch (err) {
       callback(err.message, false);
