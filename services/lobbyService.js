@@ -27,15 +27,18 @@ module.exports = function lobbyService() {
     }
   }
   async function checkDuplicate(lobbyId, socketId) {
-    io.of("/game")
-      .in(lobbyId)
-      .clients((error, clients) => {
-        if (error) throw error;
-        console.log(clients);
-        for (const client of clients) {
-          if (client == socketId) throw new Error("duplicate joining process");
-        }
-      });
+    return await new Promise((resolve, reject) => {
+      io.of("/game")
+        .in(lobbyId)
+        .clients((error, clients) => {
+          if (error) throw error;
+          for (const client of clients) {
+            if (client == socketId)
+              throw new Error("duplicate joining process");
+          }
+          resolve();
+        });
+    });
   }
 
   function checkFreeSpace(lobby) {
@@ -188,6 +191,7 @@ module.exports = function lobbyService() {
         }
       }
     } catch (error) {
+      console.log(error);
       callback(error);
     }
   };

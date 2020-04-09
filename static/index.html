@@ -1,27 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Socket IO</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.0/socket.io.dev.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
   </head>
 
-<body>
+  <body>
     <p id="log"></p>
 
-    
-
     <button id="create">Create Lobby</button>
-    
+
     <label for="joinLobby">Join Lobby </label>
-    <input id="lobbyId" type="text" value="1234" >
+    <input id="lobbyId" type="text" value="1234" />
     <button id="join">Join Lobby</button>
+    <button id="rejoinbtn">Rejoin Lobby</button>
+    <label for="sessionid">Session id </label>
+    <input id="sessionid" type="text" />
+
     <script src="main.js"></script>
-<hr>
+    <hr />
 
-    <input id="txt" type="text" placeholder="Message" >
-</body>
-
+    <input id="txt" type="text" placeholder="Message" />
+  </body>
 </html>

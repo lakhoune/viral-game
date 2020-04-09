@@ -4,9 +4,9 @@ window.onload = () => {
   var lobbyId = document.getElementById("lobbyId");
   var join = document.getElementById("join");
   var output = document.getElementById("log");
-    
-    
-    
+  var rejoinbtn = document.getElementById("rejoinbtn");
+  var sessionid = document.getElementById("sessionid");
+
   var adminChat = io("/admin");
   var gameSocket = io("/game");
 
@@ -25,9 +25,11 @@ window.onload = () => {
     gameSocket.emit("joinLobby", lobbyId.value);
   });
 
-    
-    
-    
+  rejoinbtn.addEventListener("click", () => {
+    console.log(sessionid.value);
+    gameSocket.emit("rejoinLobby", sessionid.value, lobbyId.value);
+  });
+
   gameSocket.on("log", (msg) => {
     output.innerHTML += msg + "<br>";
     console.log(msg);
@@ -39,11 +41,6 @@ window.onload = () => {
     console.log(msg);
   });
 
-    
-    
-    
-    
-    
   adminChat.on("chat", (data) => {
     output.innerHTML += data + "<br>";
     console.log(data);
