@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import * as io from 'socket.io-client';
 import {environment} from '../environments/environment';
+import {SessionauthService} from './sessionauth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ admin;
 static lobbyID;
 playerNAME;
     
-  constructor() {      }
+constructor(private auth: SessionauthService) {      }
     
     setupSocketConnection() {
     this.socket = io(environment.SOCKET_ENDPOINT);
@@ -26,16 +27,21 @@ playerNAME;
     console.log(data);
   });
         this.socket.on("log", (msg) => {    //output server side msgs
-    console.log(msg); 
+            console.log(msg); 
             
-    if(/lobby id:(?=[0-9]*)/.test(msg)){
-        SocketioService.lobbyID = msg.split(/Created lobby, lobby id: /)[1];
-    console.log(SocketioService.lobbyID);
-}
+            if(/lobby id:(?=[0-9]*)/.test(msg)){
+                SocketioService.lobbyID = msg.split(/lobby id: /)[1];
+                console.log(SocketioService.lobbyID);
+            }
+            
+            if(/Got session id:/.test(msg)){
+                SessionauthService.setID(msg.split(/Got session id:/)[1]);
+                console.log(SessionauthService.readID());
+            }
             
   });
         this.socket.on("err", (msg) => {  //output error msgs
-    console.log(msg);
+          console.log(msg);
   });
 
   }
@@ -50,7 +56,18 @@ createLobby(num){
 }
     
 joinLobby(num){
+    
+    
+    
+if(SessionauthService.readID()){
+    
+    this.socket.emit("rejoinLobby", SessionauthService.readID(), num);
+} else {
+    
     this.socket.emit("joinLobby", num);
+    
+    
+}
     
 } 
     

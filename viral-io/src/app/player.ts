@@ -1,5 +1,7 @@
+import { Role } from './role';
+
 export class Player { 
-role: role; //virus or researcher
+role: string; //virus or researcher
 
 id: string;
 
