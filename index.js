@@ -97,7 +97,7 @@ game.on("connection", (socket) => {
     });
   });
 
-  socket.on("rejoinLobby", () => {
+  socket.on("rejoinLobby", (sessionId) => {
     socket.services.lobby.rejoinLobby(socket, lobbyId, sessionId, (err) => {
       if (err) {
         socket.emit("err", err);
