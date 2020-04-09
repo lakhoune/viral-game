@@ -169,13 +169,27 @@ module.exports = function lobbyService() {
     }
   };
 
-  lobbyService.checkLobbyId = (lobbyId, callback) => {
-    //implement
-    // .
-    // .
-    // .
-    callback(/*true if lobby is found*/);
-  };
+  lobbyService.rejoinLobby = (socket, lobbyId, sessionId, callback) => {
+    try {
+      if (socket.currLobby) {
+        throw new Error("already in a lobby");
+      }
+      var lobby = getLobby(lobbyId);
+      checkDuplicate(lobby.id, socket.id); //to check if client is already in that lobby
+      for (let index = 0; index < lobby.participants.length; index++) {
+        let participant = lobby.participants[index];
 
+        if (participant.sessionId == sessionId) {
+          participant.socketId = socket.id; //overwrite old socket id of participant
+          socket.join(lobbyId, () => {
+            socket.currLobby = lobbyId;
+            callback(false);
+          });
+        }
+      }
+    } catch (error) {
+      callback(error);
+    }
+  };
   return lobbyService;
 };

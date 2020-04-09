@@ -96,6 +96,17 @@ game.on("connection", (socket) => {
       }
     });
   });
+
+  socket.on("rejoinLobby", () => {
+    socket.services.lobby.rejoinLobby(socket, lobbyId, sessionId, (err) => {
+      if (err) {
+        socket.emit("err", err);
+      } else {
+        socket.broadcast.to(lobbyId).emit("log", "Member rejoined lobby ");
+        socket.emit("log", "Successfully rejoined lobby");
+      }
+    });
+  });
   socket.on("disconnect", (data) => {
     let tmp = socket.currLobby;
     if (data == "transport close") {
