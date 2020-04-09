@@ -9,21 +9,21 @@ export class SessionauthService {
   constructor() { }
 
 
-setID(num){
+static setID(num){
     
-    localStorage.setItem('ID', num);
+    localStorage.setItem('token', num);
 }
 
-deleteID(){
+static deleteID(){
     
-    localStorage.removeItem('ID');
+    localStorage.removeItem('token');
 }
-readID(){
+static readID(){
     
-    return localStorage.getItem('ID');
+    return localStorage.getItem('token');
     
 }
-clearStorage(){
+static clearStorage(){
     
     localStorage.clear();
 }    

@@ -1,6 +1,8 @@
+import { Player } from './player';
+
 export class Team { 
-players: player[];
-points:num;
-r_points:num;
+players: string[];
+points:number;
+r_points:number;
 
 }

@@ -64,7 +64,7 @@ game.on("connection", (socket) => {
           socket.emit("err", err.message);
         } else {
           socket.broadcast.to(lobby.id).emit("log", "Member joined lobby ");
-          socket.emit("log", "Joined lobby " + lobby.id);
+          socket.emit("log", "Joined lobby id: " + lobby.id);
           socket.emit("log", "Got session id: " + sessionId);
           game
             .to(lobbyId)
@@ -98,7 +98,7 @@ game.on("connection", (socket) => {
   });
 
   socket.on("rejoinLobby", (sessionId) => {
-    socket.services.lobby.rejoinLobby(socket, lobbyId, sessionId, (err) => {
+    socket.services.lobby.rejoinLobby(socket, sessionId, sessionId, (err) => {
       if (err) {
         socket.emit("err", err);
       } else {
