@@ -97,13 +97,14 @@ game.on("connection", (socket) => {
     });
   });
 
-  socket.on("rejoinLobby", (sessionId) => {
-    socket.services.lobby.rejoinLobby(socket, sessionId, sessionId, (err) => {
+  socket.on("rejoinLobby", (sessionId, lobbyId) => {
+    socket.services.lobby.rejoinLobby(socket, lobbyId, sessionId, (err, lobby) => {
       if (err) {
         socket.emit("err", err);
       } else {
-        socket.broadcast.to(lobbyId).emit("log", "Member rejoined lobby ");
+        socket.broadcast.to(lobby.id).emit("log", "Member rejoined lobby ");
         socket.emit("log", "Successfully rejoined lobby");
+        socket.emit("log", "Joined lobby id: " + lobby.id);
       }
     });
   });

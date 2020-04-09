@@ -61,7 +61,7 @@ joinLobby(num){
     
 if(SessionauthService.readID()){
     
-    this.socket.emit("rejoinLobby", SessionauthService.readID());
+    this.socket.emit("rejoinLobby", SessionauthService.readID(), num);
 } else {
     
     this.socket.emit("joinLobby", num);
