@@ -19,6 +19,7 @@ window.onload = () => {
 
   create.addEventListener("click", () => {
     rand = Math.floor(Math.random() * 10000);
+    //gameSocket.emit("test", "hallo", "hallol");
     gameSocket.emit("createLobby", rand, 4);
   });
   join.addEventListener("click", () => {

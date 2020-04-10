@@ -39,6 +39,14 @@ game.on("connection", (socket) => {
   console.log(socket.id, " connected");
   socket.emit("log", "Successfully connected, socket id: " + socket.id);
 
+  socket.on("test", (...args) => {
+    console.log("running test");
+    socket.services.validation.checkInfix(
+      args[0] || "halloJungs",
+      args[1] || "jungs"
+    );
+  });
+
   socket.on("createLobby", (id, size) => {
     socket.services.lobby.createLobby(
       socket,
@@ -75,7 +83,7 @@ game.on("connection", (socket) => {
   });
 
   socket.on("setName", (name) => {
-    socket.services.lobby.setName(socket, name, (err, name) => {
+    socket.services.lobby.setName(socket, name, (err, name, status) => {
       if (err) {
         socket.emit("err", err);
       } else {
@@ -83,6 +91,9 @@ game.on("connection", (socket) => {
         socket.broadcast
           .to(socket.currLobby)
           .emit("log", name + " joined lobby ");
+        if (status == "ready") {
+          socket.broadcast.to(socket.currLobby).emit("log", "Lobby is ready");
+        }
       }
     });
   });
@@ -104,6 +115,16 @@ game.on("connection", (socket) => {
       } else {
         socket.broadcast.to(lobbyId).emit("log", "Member rejoined lobby ");
         socket.emit("log", "Successfully rejoined lobby id: " + lobbyId);
+      }
+    });
+  });
+
+  socket.on("getNames", (lobbyId) => {
+    socket.services.lobby.getParticipantNames(socket, lobbyId, (err, names) => {
+      if (err) {
+        socket.emit("err", err.message);
+      } else {
+        socket.emit("names", names);
       }
     });
   });

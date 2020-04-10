@@ -2,4 +2,5 @@
 // the right config
 module.exports = {
   lobby: require("./lobbyService")(),
+  validation: require("./validationService")(),
 };

@@ -3,16 +3,29 @@
 module.exports = function lobbyService() {
   const Lobby = require("../models/Lobby");
   const Participant = require("../models/Participant");
-  const io = require("socket.io")();
+
   var lobbies = [];
   const LobbySizes = [4, 6, 8];
 
-  function checkLobbyId(id) {
-    for (let i = 0; i < lobbies.length; i++) {
-      if (lobbies[i].id == id) {
-        throw new Error("lobby id already taken");
+  function updateLobbyStatus(lobby) {
+    if (lobby.participants.length == lobby.size) {
+      lobby.status = "all members connected";
+    }
+    for (const participant of participants) {
+      if (!participant.name) {
+        return;
       }
     }
+    lobby.status = "ready";
+  }
+
+  function getParticipant(lobby, socketId) {
+    for (const participant of lobby.participants) {
+      if (participant.socketId == socketId) {
+        return participant;
+      }
+    }
+    throw new Error("Participant not in lobby");
   }
 
   function removeParticipant(socket, lobby) {
@@ -26,34 +39,7 @@ module.exports = function lobbyService() {
       }
     }
   }
-  async function checkDuplicate(lobbyId, socketId) {
-    return await new Promise((resolve, reject) => {
-      io.of("/game")
-        .in(lobbyId)
-        .clients((error, clients) => {
-          if (error) throw error;
-          for (const client of clients) {
-            if (client == socketId)
-              throw new Error("duplicate joining process");
-          }
-          resolve();
-        });
-    });
-  }
 
-  function checkFreeSpace(lobby) {
-    if (lobby.participants >= lobby.capacity) {
-      throw new Error("lobby full");
-    }
-  }
-
-  function checkSize(size) {
-    if (!LobbySizes.includes(size)) {
-      throw new Error(
-        "Size of " + size + " not supported, supported sizes are: " + LobbySizes
-      );
-    }
-  }
   function getLobby(id) {
     for (let i = 0; i < lobbies.length; i++) {
       if (lobbies[i].id == id) {
@@ -88,7 +74,7 @@ module.exports = function lobbyService() {
       if (socket.currLobby) {
         throw new Error("already in a lobby");
       }
-      checkSize(lobbySize);
+      socket.services.validation.checkSize(LobbySizes, lobbySize);
 
       let lobbyId;
       if (typeof id != String) {
@@ -97,7 +83,7 @@ module.exports = function lobbyService() {
         lobbyId = id;
       }
 
-      checkLobbyId(lobbyId);
+      socket.services.validation.checkLobbyId(lobbies, lobbyId);
       var lobby = new Lobby(lobbyId, lobbySize);
       lobbies.push(lobby);
 
@@ -119,8 +105,8 @@ module.exports = function lobbyService() {
         throw new Error("already in a lobby");
       }
       var lobby = getLobby(lobbyId);
-      checkDuplicate(lobby.id, socket.id);
-      checkFreeSpace(lobby);
+      socket.services.validation.checkDuplicate(lobby.id, socket.id);
+      socket.services.validation.hasFreeSpace(lobby);
 
       let participant = new Participant(socket.id);
 
@@ -136,16 +122,40 @@ module.exports = function lobbyService() {
 
   lobbyService.setName = (socket, name, callback) => {
     try {
+      socket.services.validation.checkName(name);
       if (!socket.currLobby) {
         throw new Error("currently in no lobby");
       }
-      if (socket.name) {
+
+      let lobby = getLobby(socket.currLobby);
+      let participant = getParticipant(lobby, socket.id);
+      if (participant.name) {
         throw new Error("name already set");
       }
-      socket.name = name;
-      callback(false, socket.name);
+
+      participant.name = name;
+      updateLobbyStatus(lobby);
+      callback(false, participant.name, lobby.status);
     } catch (err) {
-      callback(err, false);
+      callback(err, false, false);
+    }
+  };
+  lobbyService.getParticipantNames = async (socket, lobbyId, callback) => {
+    try {
+      if (!(socket.currLobby == lobbyId)) {
+        throw new Error(
+          "Unauthorized: You are not a member of lobby " + lobbyId
+        );
+      }
+      let lobby = getLobby(lobbyId);
+      let names = [];
+      await lobby.participants.forEach((participant) => {
+        names.push(participant.name);
+      });
+
+      callback(false, names);
+    } catch (error) {
+      callback(error, false);
     }
   };
 
@@ -178,7 +188,7 @@ module.exports = function lobbyService() {
         throw new Error("already in a lobby");
       }
       var lobby = getLobby(lobbyId);
-      checkDuplicate(lobby.id, socket.id); //to check if client is already in that lobby
+      socket.services.validation.checkDuplicate(lobby.id, socket.id); //to check if client is already in that lobby
       for (let index = 0; index < lobby.participants.length; index++) {
         let participant = lobby.participants[index];
 
