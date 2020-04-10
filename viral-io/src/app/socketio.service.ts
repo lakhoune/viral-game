@@ -35,7 +35,7 @@ constructor(private auth: SessionauthService) {      }
             }
             
             if(/Got session id:/.test(msg)){
-                SessionauthService.setID(msg.split(/Got session id:/)[1]);
+                SessionauthService.setID(msg.split(/Got session id: /)[1]);
                 console.log(SessionauthService.readID());
             }
             
@@ -60,8 +60,10 @@ joinLobby(num){
     
     
 if(SessionauthService.readID()){
-    
+    console.log(SessionauthService.readID());
+    console.log(num);
     this.socket.emit("rejoinLobby", SessionauthService.readID(), num);
+    
 } else {
     
     this.socket.emit("joinLobby", num);
