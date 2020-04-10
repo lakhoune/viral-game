@@ -14,6 +14,30 @@ module.exports = function lobbyService() {
       }
     }
   }
+  function updateLobbyStatus(lobby) {
+    if (lobby.participants.length == lobby.size) {
+      lobby.status = "all members connected";
+    }
+    for (const participant of participants) {
+      if (!participant.name) {
+        return;
+      }
+    }
+    lobby.status = "ready";
+  }
+  function checkName(name) {
+    if (!name || name.length < 3) {
+      throw new Error("Please provide a name of at least 3 characters");
+    }
+  }
+  function getParticipant(lobby, socketId) {
+    for (const participant of lobby.participants) {
+      if (participant.socketId == socketId) {
+        return participant;
+      }
+    }
+    throw new Error("Participant not in lobby");
+  }
 
   function removeParticipant(socket, lobby) {
     //only remove the socketId
@@ -136,16 +160,35 @@ module.exports = function lobbyService() {
 
   lobbyService.setName = (socket, name, callback) => {
     try {
+      checkName(name);
       if (!socket.currLobby) {
         throw new Error("currently in no lobby");
       }
-      if (socket.name) {
+
+      let lobby = getLobby(socket.currLobby);
+      let participant = getParticipant(lobby, socket.id);
+      if (participant.name) {
         throw new Error("name already set");
       }
-      socket.name = name;
-      callback(false, socket.name);
+
+      participant.name = name;
+      updateLobbyStatus(lobby);
+      callback(false, participant.name, lobby.status);
     } catch (err) {
-      callback(err, false);
+      callback(err, false, false);
+    }
+  };
+  lobbyService.getParticipantNames = async (lobbyId, callback) => {
+    try {
+      let lobby = getLobby(lobbyId);
+      let names = [];
+      await lobby.participants.forEach((participant) => {
+        names.push(participant.name);
+      });
+
+      callback(false, names);
+    } catch (error) {
+      callback(error, false);
     }
   };
 
