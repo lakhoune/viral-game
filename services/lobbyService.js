@@ -11,7 +11,7 @@ module.exports = function lobbyService() {
     if (lobby.participants.length == lobby.size) {
       lobby.status = "all members connected";
     }
-    for (const participant of participants) {
+    for (let participant of participants) {
       if (!participant.name) {
         return;
       }
@@ -137,7 +137,8 @@ module.exports = function lobbyService() {
       updateLobbyStatus(lobby);
       callback(false, participant.name, lobby.status);
     } catch (err) {
-      callback(err, false, false);
+      console.log(err);
+      callback(err.message, false, false);
     }
   };
   lobbyService.getParticipantNames = async (socket, lobbyId, callback) => {
