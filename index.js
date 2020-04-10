@@ -39,6 +39,14 @@ game.on("connection", (socket) => {
   console.log(socket.id, " connected");
   socket.emit("log", "Successfully connected, socket id: " + socket.id);
 
+  socket.on("test", (...args) => {
+    console.log("running test");
+    socket.services.validation.checkInfix(
+      args[0] || "halloJungs",
+      args[1] || "jungs"
+    );
+  });
+
   socket.on("createLobby", (id, size) => {
     socket.services.lobby.createLobby(
       socket,

@@ -1,4 +1,5 @@
 module.exports = function validationService() {
+  const io = require("socket.io")();
   validationService.checkLobbyId = (lobbies, id) => {
     for (let i = 0; i < lobbies.length; i++) {
       if (lobbies[i].id == id) {
@@ -35,6 +36,17 @@ module.exports = function validationService() {
       throw new Error(
         "Size of " + size + " not supported, supported sizes are: " + sizes
       );
+    }
+  };
+  validationService.checkInfix = (w1, w2) => {
+    let regex1 = /[abc]*w1[abc]*/gi;
+    let regex2 = /[abc]*w2[abc]*/gi;
+    if (regex1.test(w2) || regex2.test(w1)) {
+      console.log("infix");
+      return true;
+    } else {
+      console.log("no infix");
+      return false;
     }
   };
   return validationService;

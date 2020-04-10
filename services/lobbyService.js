@@ -3,7 +3,7 @@
 module.exports = function lobbyService() {
   const Lobby = require("../models/Lobby");
   const Participant = require("../models/Participant");
-  const io = require("socket.io")();
+
   var lobbies = [];
   const LobbySizes = [4, 6, 8];
 
