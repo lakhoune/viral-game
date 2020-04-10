@@ -122,7 +122,7 @@ module.exports = function lobbyService() {
 
   lobbyService.setName = (socket, name, callback) => {
     try {
-      socket.services.validation.checkName(name);
+      socket.services.validation.isValidName(name);
       if (!socket.currLobby) {
         throw new Error("currently in no lobby");
       }
