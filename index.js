@@ -112,7 +112,7 @@ game.on("connection", (socket) => {
   });
 
   socket.on("getNames", (lobbyId) => {
-    socket.services.lobby.getParticipantNames(lobbyId, (err, names) => {
+    socket.services.lobby.getParticipantNames(socket, lobbyId, (err, names) => {
       if (err) {
         socket.emit("err", err.message);
       } else {

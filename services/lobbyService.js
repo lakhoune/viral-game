@@ -178,8 +178,13 @@ module.exports = function lobbyService() {
       callback(err, false, false);
     }
   };
-  lobbyService.getParticipantNames = async (lobbyId, callback) => {
+  lobbyService.getParticipantNames = async (socket, lobbyId, callback) => {
     try {
+      if (!(socket.currLobby == lobbyId)) {
+        throw new Error(
+          "Unauthorized: You are not a member of lobby " + lobbyId
+        );
+      }
       let lobby = getLobby(lobbyId);
       let names = [];
       await lobby.participants.forEach((participant) => {
