@@ -39,8 +39,8 @@ module.exports = function validationService() {
     }
   };
   validationService.checkInfix = (w1, w2) => {
-    let regex1 = /[abc]*w1[abc]*/gi;
-    let regex2 = /[abc]*w2[abc]*/gi;
+    let regex1 = new RegExp(`[abc]*${w1}[abc]*`, "i");
+    let regex2 = new RegExp(`[abc]*${w2}[abc]*`, "i");
     if (regex1.test(w2) || regex2.test(w1)) {
       console.log("infix");
       return true;
