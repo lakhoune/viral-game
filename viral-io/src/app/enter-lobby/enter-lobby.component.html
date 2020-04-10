@@ -16,13 +16,13 @@
 
             <div class="col-md-4" style="background-color:;"></div>
             <div class="col-12 col-md-4">
-                <input style="text-align: center;" type="text" class="form-control" id="playerName" aria-describedby="textHelp" placeholder="Covid-19" required name="player">
+                <input [(ngModel)]="name" style="text-align: center;" type="text" class="form-control" id="playerName" aria-describedby="textHelp" placeholder="Covid-19" required name="player" >
             </div>
         </div>
     </div>
 
 
-    <div routerLink="/lobby/{{size}}/1337" routerLinkActive="active" style="width: 300px; margin: auto; background-color:; margin-top: 25px; margin-bottom: 25px;">
+    <div routerLink="/lobby/{{size}}/1337" routerLinkActive="active" style="width: 300px; margin: auto; background-color:; margin-top: 25px; margin-bottom: 25px;" (click)="enterName()">
         <div style="display: inline-block;  width: 50px; height: 50px; background-color:; margin: auto; background-image: url(../../assets/play.svg);" >
             <h5 style="visibility: hidden; line-height: 50px; margin: auto;">.</h5>
         </div>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import {SocketioService} from '../socketio.service';
+import { FormsModule } from '@angular/forms';
+
 @Component({
   selector: 'app-enter-lobby',
   templateUrl: './enter-lobby.component.html',
@@ -12,10 +14,10 @@ export class EnterLobbyComponent implements OnInit {
     title:string ="Title";
     pin;
     size;
-    
+    name;
     
   constructor(  private route: ActivatedRoute,
-  private router: Router) { }
+  private router: Router, private socketService: SocketioService) { }
 
   ngOnInit() {
       
@@ -32,6 +34,13 @@ export class EnterLobbyComponent implements OnInit {
     
 getPin(){return SocketioService.lobbyID;}
     
+    
+enterName(){
+    
+    
+    this.socketService.setName(this.name);
+    
+}    
 
 }
  

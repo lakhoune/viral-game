@@ -71,7 +71,13 @@ if(SessionauthService.readID()){
     
 }
     
-} 
+}
+    
+    
+setName(name){
+    
+    this.socket.emit("setName", name);
+}    
     
 
     

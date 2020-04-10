@@ -49,7 +49,7 @@ game.on("connection", (socket) => {
           socket.emit("err", err);
         } else {
           socket.emit("log", "Created lobby, lobby id: " + lobby.id);
-          socket.emit("log", "Got session id:" + sessionId);
+          socket.emit("log", "Got session id: " + sessionId);
         }
       }
     );
