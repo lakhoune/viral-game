@@ -85,6 +85,7 @@ game.on("connection", (socket) => {
   socket.on("setName", (name) => {
     socket.services.lobby.setName(socket, name, (err, name, status) => {
       if (err) {
+        console.log(err);
         socket.emit("err", err);
       } else {
         socket.emit("log", "name set to: " + name);
