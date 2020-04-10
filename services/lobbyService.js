@@ -20,7 +20,7 @@ module.exports = function lobbyService() {
   }
 
   function getParticipant(lobby, socketId) {
-    for (const participant of lobby.participants) {
+    for (let participant of lobby.participants) {
       if (participant.socketId == socketId) {
         return participant;
       }
