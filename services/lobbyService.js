@@ -34,7 +34,7 @@ module.exports = function lobbyService() {
       if (lobby.participants[i].socketId == socket.id) {
         lobby.participants[i].socketId = null;
         lobby.participants[i].status = "disconnected";
-        socket.currLobby = false;
+        socket.currLobby = null;
         return;
       }
     }
