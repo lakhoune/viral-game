@@ -11,7 +11,7 @@ module.exports = function lobbyService() {
     if (lobby.participants.length == lobby.size) {
       lobby.status = "all members connected";
     }
-    for (let participant of participants) {
+    for (let participant of lobby.participants) {
       if (!participant.name) {
         return;
       }
@@ -20,6 +20,7 @@ module.exports = function lobbyService() {
   }
 
   function getParticipant(lobby, socketId) {
+    console.log(lobby);
     for (let participant of lobby.participants) {
       if (participant.socketId == socketId) {
         return participant;
@@ -129,6 +130,7 @@ module.exports = function lobbyService() {
 
       let lobby = getLobby(socket.currLobby);
       let participant = getParticipant(lobby, socket.id);
+      console.log(participant);
       if (participant.name) {
         throw new Error("name already set");
       }
