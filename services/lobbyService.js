@@ -132,7 +132,7 @@ module.exports = function lobbyService() {
       let participant = getParticipant(lobby, socket.id);
       console.log(participant);
       if (participant.name) {
-        throw new Error("name already N");
+        throw new Error("name already set");
       }
 
       participant.name = name;
