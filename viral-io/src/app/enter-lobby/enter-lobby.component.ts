@@ -33,7 +33,7 @@ export class EnterLobbyComponent implements OnInit {
     
     
 getPin(){return SocketioService.lobbyID;}
-    
+getSize(){return SocketioService.lobbySize}    
     
 enterName(){
     

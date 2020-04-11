@@ -10,6 +10,7 @@ export class SocketioService {
     
     socket;
     admin;
+    static lobbySize;
     
     static lobbyID;
     playerNAME;
@@ -28,7 +29,9 @@ export class SocketioService {
             console.log(data);
         });
         this.socket.on("data", (msg) => {  //output data
-          console.log(msg);//store this data as lobby size in a globally accessable variable //satic var of SocketioService
+          //store this data as lobby size in a globally accessable variable //satic var of SocketioService
+             SocketioService.lobbySize = msg;
+            console.log(SocketioService.lobbySize);
         });
         this.socket.on("log", (msg) => {    //output server side msgs
             console.log(msg); 
@@ -56,6 +59,9 @@ export class SocketioService {
         let rand = Math.floor(Math.random() * 10000);
         this.socket.emit("createLobby", rand, num);
         console.log("test connection here, create adminchat");
+        console.log("Joe");
+        console.log(num);
+        console.log("Exotic");
         this.getLobbySize();
 
     }
