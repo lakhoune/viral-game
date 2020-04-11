@@ -11,7 +11,7 @@ export class SocketioService {
     socket;
     admin;
     static lobbySize;
-    
+    static participants:[string]= [];
     static lobbyID;
     playerNAME;
     
@@ -23,15 +23,22 @@ export class SocketioService {
         
         
         this.admin.on("chat", (data) => {
-            console.log(data);
+            console.log("admin chat: "+data);
         });
         this.admin.on("log", (data) => {
-            console.log(data);
+            console.log("admin log: "+data);
         });
         this.socket.on("data", (msg) => {  //output data
           //store this data as lobby size in a globally accessable variable //satic var of SocketioService
              SocketioService.lobbySize = msg;
             console.log(SocketioService.lobbySize);
+        });
+        this.socket.on("newName", (msg) => {  //output data
+          //store this data as lobby size in a globally accessable variable //satic var of SocketioService
+            SocketioService.participants.push(msg);
+            console.log("weeb");
+            console.log(msg);
+             console.log(SocketioService.participants);
         });
         this.socket.on("log", (msg) => {    //output server side msgs
             console.log(msg); 
