@@ -8,6 +8,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HostListener} from "@angular/core";
 import {  HostBinding } from '@angular/core';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-lobby',
@@ -33,17 +34,32 @@ constructor() {
         $(document).ready(function(){
               
             //add cells to the DOM 
-            var classes=["a","b","c","d","e","f","g","h"];
-              $( "#lobbyCell" ).append('<div class="a virusCell" style="    opacity: 0.85;background-image: url(../../assets/virus_red.svg);background-repeat: no-repeat;width: 6em;height: 6em;position: absolute;background-color:;text-align: center;"><a class="virusLabel" style="text-align: center;line-height: 6em; word-break: break-all;">Player</a></div>');
+            console.log("#neverForgetHarambe");
+            console.log(SocketioService.participants);
+            console.log("Epstein didn't kill himself");
+            //add those that are already in a lobby
+            var i=0
+            SocketioService.participants.forEach(function(element){
+                
+                if(element!=null){
+                    var string = '<div class="a'+i+' virusCell" style=" opacity: 0.85;background-image: url(../../assets/virus_'+i+'.svg);background-repeat: no-repeat;width: 6em;height: 6em;position: absolute;background-color:;text-align: center;"><a class="virusLabel" style="text-align: center;line-height: 5em; word-break: break-all;">'+element+'</a></div>';
+                    i++;
+                    $( "#lobbyCell" ).append(string);
+                }
+                
+                
+                
+            });
+              
             //animate Cells  
-            animateDiv('.a');
-            setTimeout(function(){animateDiv('.b');}, Math.floor(Math.random() * 4000));
-            setTimeout(function(){animateDiv('.c');}, Math.floor(Math.random() * 13200));
-            setTimeout(function(){animateDiv('.d');}, Math.floor(Math.random() * 5340));
-            setTimeout(function(){animateDiv('.e');}, Math.floor(Math.random() * 2900));
-            setTimeout(function(){animateDiv('.f');}, Math.floor(Math.random() * 2503));
-            setTimeout(function(){animateDiv('.g');}, Math.floor(Math.random() * 3954));
-            setTimeout(function(){animateDiv('.h');}, Math.floor(Math.random() * 1034));
+            animateDiv('.a0');
+            setTimeout(function(){animateDiv('.a1');}, Math.floor(Math.random() * 4000));
+            setTimeout(function(){animateDiv('.a2');}, Math.floor(Math.random() * 13200));
+            setTimeout(function(){animateDiv('.a3');}, Math.floor(Math.random() * 5340));
+            setTimeout(function(){animateDiv('.a4');}, Math.floor(Math.random() * 2900));
+            setTimeout(function(){animateDiv('.a5');}, Math.floor(Math.random() * 2503));
+            setTimeout(function(){animateDiv('.a6');}, Math.floor(Math.random() * 3954));
+            setTimeout(function(){animateDiv('.a7');}, Math.floor(Math.random() * 1034));
   
         });
 
