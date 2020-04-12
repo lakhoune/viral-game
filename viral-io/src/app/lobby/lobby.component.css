@@ -1,0 +1,15 @@
+.virusCell{
+    opacity: 0.85;
+    background-image: url(../../assets/virus_red.svg);
+    background-repeat: no-repeat;
+    width: 6em;
+    height: 6em;
+    position: absolute;
+    background-color:;
+    text-align: center;
+}
+.virusLabel{
+    text-align: center;
+    line-height: 6em; 
+    word-break: break-all;
+}

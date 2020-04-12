@@ -89,11 +89,11 @@ game.on("connection", (socket) => {
         socket.emit("err", err);
       } else {
         socket.emit("log", "name set to: " + name);
-        socket.emit("newName", name);
+        socket.emit("newName", name); //send name to user
         socket.broadcast
           .to(socket.currLobby)
           .emit("log", name + " joined lobby ");
-        socket.broadcast
+        socket.broadcast //send name to all other users
           .to(socket.currLobby)
           .emit("newName", name);
         if (status == "ready") {

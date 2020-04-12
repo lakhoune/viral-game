@@ -11,7 +11,7 @@ export class SocketioService {
     socket;
     admin;
     static lobbySize;
-    static participants:[string]= [];
+    static participants:string[]= [null];
     static lobbyID;
     playerNAME;
     
@@ -30,15 +30,27 @@ export class SocketioService {
         });
         this.socket.on("data", (msg) => {  //output data
           //store this data as lobby size in a globally accessable variable //satic var of SocketioService
-             SocketioService.lobbySize = msg;
+            SocketioService.lobbySize = msg; 
             console.log(SocketioService.lobbySize);
+        });
+        this.socket.on("names", (msg) => {  //output data
+          //store this data as lobby size in a globally accessable variable //satic var of SocketioService
+            SocketioService.participants = msg;
+            SocketioService.participants = SocketioService.participants.filter(function(element, index, array){return (element != null);});
+            //console.log("weeb");
+            //console.log(msg);
+            console.log(SocketioService.participants);
         });
         this.socket.on("newName", (msg) => {  //output data
           //store this data as lobby size in a globally accessable variable //satic var of SocketioService
             SocketioService.participants.push(msg);
-            console.log("weeb");
-            console.log(msg);
-             console.log(SocketioService.participants);
+            SocketioService.participants = SocketioService.participants.filter(function(element, index, array){return (element != null);});
+            SocketioService.participants.forEach(function (value) {
+                //console.log("diccjjcjjc");
+            });
+            //console.log("weeb");
+            //console.log(msg);
+            console.log(SocketioService.participants);
         });
         this.socket.on("log", (msg) => {    //output server side msgs
             console.log(msg); 
@@ -84,6 +96,7 @@ export class SocketioService {
     
             this.socket.emit("joinLobby", num);
             this.getLobbySize();
+            this.getNames(num);
         }
     
     }
