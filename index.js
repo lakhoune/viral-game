@@ -58,6 +58,8 @@ game.on("connection", (socket) => {
         } else {
           socket.emit("log", "Created lobby, lobby id: " + lobby.id);
           socket.emit("log", "Got session id: " + sessionId);
+          socket.emit("lobbyID", lobby.id); 
+          socket.emit("token", sessionId);    
         }
       }
     );
@@ -74,6 +76,8 @@ game.on("connection", (socket) => {
           socket.broadcast.to(lobby.id).emit("log", "Member joined lobby ");
           socket.emit("log", "Joined lobby id: " + lobby.id);
           socket.emit("log", "Got session id: " + sessionId);
+          socket.emit("token", sessionId);
+          socket.emit("lobbyID", lobby.id);    
           game
             .to(lobbyId)
             .emit("log", "Lobby size: " + lobby.participants.length);
@@ -121,6 +125,7 @@ game.on("connection", (socket) => {
       } else {
         socket.broadcast.to(lobbyId).emit("log", "Member rejoined lobby ");
         socket.emit("log", "Successfully rejoined lobby id: " + lobbyId);
+        socket.emit("lobbyID", lobbyId);   
       }
     });
   });

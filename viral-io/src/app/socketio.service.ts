@@ -25,6 +25,8 @@ export class SocketioService {
     constructor(private auth: SessionauthService) {      }
     
     setupSocketConnection() {
+        
+        //create sockets
         this.socket = io(environment.SOCKET_ENDPOINT);
         this.admin = io(environment.SOCKET_ADMIN_ENDPOINT);
         
@@ -35,11 +37,11 @@ export class SocketioService {
         this.admin.on("log", (data) => {
             console.log("admin log: "+data);
         });
-        this.socket.on("data", (msg) => {  //output data
-          //store this data as lobby size in a globally accessable variable //satic var of SocketioService
-            SocketioService.lobbySize = msg; 
-            console.log(SocketioService.lobbySize);
-        });
+
+        
+        
+        
+        //log participants
         this.socket.on("names", (msg) => {  //output data
           //store this data as lobby size in a globally accessable variable //satic var of SocketioService
             SocketioService.participants = msg;
@@ -62,18 +64,37 @@ export class SocketioService {
             //console.log(msg);
             console.log(SocketioService.participants);
         });
+        
+        
+        
+        
+        //save session token in local storage
+        this.socket.on("token", (token) => {  
+                SessionauthService.setID(token);
+                console.log(SessionauthService.readID());
+        });
+        
+        //save lobby ID
+        this.socket.on("lobbyID", (id) => {  
+                SocketioService.lobbyID = id;
+                console.log(SocketioService.lobbyID);
+        });
+        //save lobby size
+        this.socket.on("data", (size) => {  //output data
+          //store this data as lobby size in a globally accessable variable //satic var of SocketioService
+            SocketioService.lobbySize = size; 
+            console.log(SocketioService.lobbySize);
+        });
+        
+        
+        //general log
         this.socket.on("log", (msg) => {    //output server side msgs
             console.log(msg); 
             
-            if(/lobby id:(?=[0-9]*)/.test(msg)){
+            /*if(/lobby id:(?=[0-9]*)/.test(msg)){
                 SocketioService.lobbyID = msg.split(/lobby id: /)[1];
                 console.log(SocketioService.lobbyID);
-            }
-            
-            if(/Got session id:/.test(msg)){
-                SessionauthService.setID(msg.split(/Got session id: /)[1]);
-                console.log(SessionauthService.readID());
-            }
+            }*/
             
         });
         this.socket.on("err", (msg) => {  //output error msgs
