@@ -7,7 +7,7 @@ import {SocketioService} from './socketio.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'viral-io';
+  title = 'viral.io';
     
     constructor(private socketService: SocketioService) {}
     
