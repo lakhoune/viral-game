@@ -1,17 +1,24 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Input, EventEmitter, Output } from '@angular/core';
 import * as io from 'socket.io-client';
 import {environment} from '../environments/environment';
 import {SessionauthService} from './sessionauth.service';
 import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
+import { interval } from 'rxjs';
+import { from } from 'rxjs';
+
+//https://angular.io/guide/observables-in-angular   /////transmitting data between components
 @Injectable({
   providedIn: 'root'
 })
 export class SocketioService {
-    
+//@Output() sendUser = new EventEmitter();
     socket;
     admin;
     static lobbySize;
     static participants:string[]= [null];
+    static observable = from(SocketioService.participants);
+    static subject = new Subject<string>();
     static lobbyID;
     playerNAME;
     
@@ -48,6 +55,9 @@ export class SocketioService {
             SocketioService.participants.forEach(function (value) {
                 //console.log("diccjjcjjc");
             });
+            var string:string=msg;
+            SocketioService.subject.next(string);
+            //this.sendUser.emit(msg);
             //console.log("weeb");
             //console.log(msg);
             console.log(SocketioService.participants);

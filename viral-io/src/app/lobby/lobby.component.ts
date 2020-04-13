@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit , Input, EventEmitter, Output } from '@angular/core';
 import * as $ from 'jquery';
 import 'jquery-ui-dist/jquery-ui.js';
 import {SocketioService} from '../socketio.service';
@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HostListener} from "@angular/core";
 import {  HostBinding } from '@angular/core';
 import { Observable } from 'rxjs';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-lobby',
@@ -48,6 +49,18 @@ constructor() {
                 }
                 
                 
+                
+            });
+            const subscription = SocketioService.subject.subscribe(function(element){
+                
+                
+                    var string = '<div class="a'+i+' virusCell" style=" opacity: 0.85;background-image: url(../../assets/virus_'+i+'.svg);background-repeat: no-repeat;width: 6em;height: 6em;position: absolute;background-color:;text-align: center;"><a class="virusLabel" style="text-align: center;line-height: 5em; word-break: break-all;">'+element+'</a></div>';
+                    
+                    $( "#lobbyCell" ).append(string);
+                
+                console.log("observable");
+                animateDiv('.a'+i+'');
+                i++;
                 
             });
               
