@@ -17,6 +17,7 @@ import { GDPRComponent } from './gdpr/gdpr.component';
 import { GameboardComponent } from './gameboard/gameboard.component';
 import { CellComponent } from './cell/cell.component';
 
+
 @NgModule({
   declarations: [
     AppComponent,
