@@ -18,14 +18,15 @@ import { from } from 'rxjs';
 export class GameService {
 
     static status = new Subject<any>(); 
+    static statusCode = 0;
     //0 no lobby
-    //1 lobby not full
-    //10 lobby token saved, ready to rejoin   
-    //2 lobby ready 
+    //10 lobby not full
+    //11 lobby token saved, ready to rejoin   
+    //20 lobby ready 
     
-    //3 game start initiated 
-    //3x round x starting 
-    //3xy round x lap y 
+    //3000 game start initiated 
+    //3x00 round x starting 
+    //3xy0 round x lap y 
     //3xyz round x lap y move z (6 moves per lap)  
 
     //4 game over
@@ -34,10 +35,49 @@ export class GameService {
     //-x error    
     
     
-    constructor(private auth: SessionauthService) {      }
+    constructor(private auth: SessionauthService) {      
+        
+    }
     
+    nextRound(){
+        GameService.status.next(GameService.statusCode+100);
+        GameService.statusCode = GameService.statusCode+100;
+    }
+    nextLap(){
+        GameService.status.next(GameService.statusCode+10);
+        GameService.statusCode = GameService.statusCode+10;
+    }
+    nextMove(){
+        GameService.status.next(GameService.statusCode+1);
+        GameService.statusCode = GameService.statusCode+1;        
+    }
+    
+    waitingForPlayers(){
+        GameService.status.next(10);
+        GameService.statusCode = 10;
+    }
+    lobbyFull(){
+        GameService.status.next(11);
+        GameService.statusCode = 11;
+    }   
     startGame(){
-        GameService.status.next(3);
+        GameService.status.next(3000);
+        GameService.statusCode = 3000;
+    }
+    endGame(){
+        GameService.status.next(4);
+        GameService.statusCode = 4;
+        this.leaveGame();
+    }
+    leaveGame(){
+        GameService.status.next(5);
+        GameService.statusCode = 5;
+        GameService.status.next(0);
+        GameService.statusCode = 0;
+    }
+    err(num:number){
+        GameService.status.next(-num);
+        GameService.statusCode = -num;
     }
 }
 
