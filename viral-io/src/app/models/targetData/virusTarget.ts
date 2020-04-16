@@ -4,7 +4,7 @@ import {metaTarget} from "./metaTarget";
 export class virusTarget extends target {
     isTeamTarget:boolean;
     
-constructor(target:metaTarget,team:team){
-    super();
+constructor(word:string,target:metaTarget,team:team){
+    super(word);
     }
 }

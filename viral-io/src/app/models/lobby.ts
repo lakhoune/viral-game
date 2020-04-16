@@ -12,5 +12,6 @@ export class lobby {
 constructor(id:number,capacity:number){
         this.id=id;
         this.capacity=capacity;
+        this.status = 1;
     }
 }

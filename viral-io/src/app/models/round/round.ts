@@ -7,7 +7,7 @@ export class round {
     score:score;
     roles:role[];
     
-constructor(){
+constructor(virus:players[], players:player[]){
         
     }
 }

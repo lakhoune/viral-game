@@ -5,7 +5,7 @@ import {metaTarget} from "./metaTarget";
 export class researchTarget extends target {
 vacc:boolean;
     
-constructor(){
-    super();
+constructor(word:string){
+    super(word);
     }
 }

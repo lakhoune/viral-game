@@ -3,7 +3,7 @@ import {team} from "../team";
 export class metaTarget extends target {
     team:team;
     
-constructor(){
-    super();
+constructor(word:string, team:team){
+    super(word);
     }
 }

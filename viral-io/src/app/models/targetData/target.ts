@@ -5,7 +5,7 @@ export abstract class target {
    // vacc:boolean;
     
     
-constructor(){
+constructor(word:string){
         
     }
 }

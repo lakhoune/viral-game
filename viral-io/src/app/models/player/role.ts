@@ -4,7 +4,7 @@ export abstract class role {
  
 player:player;
     
-constructor(){
-    
+constructor(player:player){
+        this.player=player;
     }
 }
