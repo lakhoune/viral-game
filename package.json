@@ -2,7 +2,7 @@
   "name": "viral",
   "version": "1.0.0",
   "description": "viral.io game",
-  "main": "index.js",
+  "main": "dist/app.js",
   "scripts": {
     "start": "node dist/app.js",
     "build": "tsc",

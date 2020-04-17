@@ -7,6 +7,6 @@
     "sourceMap": true,
     "outDir": "dist"
   },
-  "files": ["app.ts"],
+  "exclude": ["viral-io"],
   "lib": ["es2015"]
 }
