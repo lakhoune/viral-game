@@ -21,16 +21,16 @@ export class GameService {
     static statusCode = 0;
     //0 no lobby
     //10 lobby not full
-    //11 lobby token saved, ready to rejoin   
-    //20 lobby ready 
+    
+    //20 lobby ready (full) 
     
     //3000 game start initiated 
     //3x00 round x starting 
     //3xy0 round x lap y 
     //3xyz round x lap y move z (6 moves per lap)  
 
-    //4 game over
-    //5 leave/left lobby -> return to state 0    
+    //40 game over
+    //50 leave/left lobby -> return to state 0    
     
     //-x error    
     
@@ -57,21 +57,21 @@ export class GameService {
         GameService.statusCode = 10;
     }
     lobbyFull(){
-        GameService.status.next(11);
-        GameService.statusCode = 11;
+        GameService.status.next(20);
+        GameService.statusCode = 20;
     }   
     startGame(){
         GameService.status.next(3000);
         GameService.statusCode = 3000;
     }
     endGame(){
-        GameService.status.next(4);
-        GameService.statusCode = 4;
+        GameService.status.next(40);
+        GameService.statusCode = 40;
         this.leaveGame();
     }
     leaveGame(){
-        GameService.status.next(5);
-        GameService.statusCode = 5;
+        GameService.status.next(50);
+        GameService.statusCode = 50;
         GameService.status.next(0);
         GameService.statusCode = 0;
     }

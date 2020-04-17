@@ -10,6 +10,7 @@ import { HostListener} from "@angular/core";
 import {  HostBinding } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
+import {GameService} from '../game.service';
 
 @Component({
   selector: 'app-lobby',
@@ -19,7 +20,7 @@ import { Subject } from 'rxjs';
 export class LobbyComponent implements OnInit {
     
     
-    
+    toggle = false;
     
     
 
@@ -58,11 +59,12 @@ constructor() {
                     
                     $( "#lobbyCell" ).append(string);
                 
-                console.log("observable");
+               // console.log("observable");
                 animateDiv('.a'+i+'');
                 i++;
                 
             });
+            
               
             //animate Cells  
             animateDiv('.a0');
@@ -74,6 +76,12 @@ constructor() {
             setTimeout(function(){animateDiv('.a6');}, Math.floor(Math.random() * 3954));
             setTimeout(function(){animateDiv('.a7');}, Math.floor(Math.random() * 1034));
   
+            const gameStatus = GameService.status.subscribe(function(status){
+                console.log("2020");
+                console.log(status);
+                if(status==3000){this.toggle=true;}
+                
+            });
         });
 
 function makeNewPosition(){

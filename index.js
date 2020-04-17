@@ -101,7 +101,8 @@ game.on("connection", (socket) => {
           .to(socket.currLobby)
           .emit("newName", name);
         if (status == "ready") {
-          socket.broadcast.to(socket.currLobby).emit("log", "Lobby is ready");
+            socket.broadcast.to(socket.currLobby).emit("log", "Lobby is ready");
+            //socket.broadcast.to(socket.currLobby).emit("status", 20);
             
         }
       }
