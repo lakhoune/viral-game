@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 import { interval } from 'rxjs';
 import { from } from 'rxjs';
-
+import {GameService} from './game.service';
 //https://angular.io/guide/observables-in-angular   /////transmitting data between components
 @Injectable({
   providedIn: 'root'
@@ -22,7 +22,7 @@ export class SocketioService {
     static lobbyID;
     playerNAME;
     
-    constructor(private auth: SessionauthService) {      }
+constructor(private auth: SessionauthService, private game: GameService) {      }
     
     setupSocketConnection() {
         
@@ -72,6 +72,11 @@ export class SocketioService {
         this.socket.on("token", (token) => {  
                 SessionauthService.setID(token);
                 console.log(SessionauthService.readID());
+        });
+        this.socket.on("status", (s) => {  
+            if(s==20){
+                this.game.startGame();
+            }
         });
         
         //save lobby ID
