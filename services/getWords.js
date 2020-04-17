@@ -1,65 +1,39 @@
+const sqlite3 = require("sqlite3").verbose();
 
-const sqlite3 = require('sqlite3').verbose();
+var jay;
 
+exports.getWords = function getWords(num, callback) {
+  console.log(num);
 
+  wrds = [];
 
-    var jay;
-    
+  console.log("lerooooyyy");
 
-    exports.getWords = function getWords(num,callback){ 
-        
-        
-       console.log(num);
-        
-        wrds =[];
+  var sql = `SELECT word FROM wordList ORDER BY random() LIMIT ` + num + ``;
 
+  let db = new sqlite3.Database("../sqlite-db/words.db");
 
-        console.log("lerooooyyy"); 
-        
-        
-        var sql =`SELECT word FROM wordList ORDER BY random() LIMIT `+num+``;
+  db.each(
+    sql,
+    [],
+    (err, rows) => {
+      if (err) {
+        console.log(err);
+      }
 
-        let db = new sqlite3.Database('../sqlite-db/words.db');
-        
-        
+      if (rows) {
+        //console.log(rows);
+        jay = rows;
+        wrds.push(rows.word);
 
-    
+        //console.log(jay);
+      }
+    },
+    function () {
+      db.close();
+      callback(wrds);
+    }
+  );
 
-        
-        
-        db.each(sql, [], (err, rows) => {
-            if (err) {
-                
-                console.log(err);
-            }
-            
-
-            
-
-            if(rows){
-
-                //console.log(rows);
-                jay=rows;
-                wrds.push(rows.word);
-               
-                
-                //console.log(jay);
-                
-                
-
-            }
-
-
-          
-
-        },function(){db.close();callback(wrds);});
-
-
-        
-  
-        
-    
-    console.log("jenkins!");
-        
-      
-}
+  console.log("jenkins!");
+};
