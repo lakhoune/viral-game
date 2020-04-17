@@ -41,14 +41,6 @@ module.exports = function lobbyService() {
     }
   }
 
-  function getLobby(id) {
-    for (let i = 0; i < lobbies.length; i++) {
-      if (lobbies[i].id == id) {
-        return lobbies[i];
-      }
-    }
-    throw new Error("lobby non-existant");
-  }
   function removeLobby(lobbyId) {
     for (let i = 0; i < lobbies.length; i++) {
       if (lobbies[i].id == lobbyId) {
@@ -58,12 +50,21 @@ module.exports = function lobbyService() {
   }
 
   //exported service functions
+  lobbyService.getLobby = (id) => {
+    for (let i = 0; i < lobbies.length; i++) {
+      if (lobbies[i].id == id) {
+        return lobbies[i];
+      }
+    }
+    throw new Error("lobby non-existant");
+  };
+
   lobbyService.getLobbySize = (socket, callback) => {
     try {
       if (!socket.currLobby) {
         throw new Error("currently not in a lobby");
       }
-      let lobby = getLobby(socket.currLobby);
+      let lobby = lobbyService.getLobby(socket.currLobby);
       callback(false, lobby.capacity);
     } catch (error) {
       callback(error, false);
@@ -105,7 +106,7 @@ module.exports = function lobbyService() {
       if (socket.currLobby) {
         throw new Error("already in a lobby");
       }
-      var lobby = getLobby(lobbyId);
+      var lobby = lobbyService.getLobby(lobbyId);
       socket.services.validation.checkDuplicate(lobby.id, socket.id);
       socket.services.validation.hasFreeSpace(lobby);
 
@@ -128,7 +129,7 @@ module.exports = function lobbyService() {
         throw new Error("currently in no lobby");
       }
 
-      let lobby = getLobby(socket.currLobby);
+      let lobby = lobbyService.getLobby(socket.currLobby);
       let participant = getParticipant(lobby, socket.id);
       console.log(participant);
       if (participant.name) {
@@ -150,7 +151,7 @@ module.exports = function lobbyService() {
           "Unauthorized: You are not a member of lobby " + lobbyId
         );
       }
-      let lobby = getLobby(lobbyId);
+      let lobby = lobbyService.getLobby(lobbyId);
       let names = [];
       await lobby.participants.forEach((participant) => {
         names.push(participant.name);
@@ -173,7 +174,7 @@ module.exports = function lobbyService() {
   lobbyService.removeFromLobby = (socket, callback) => {
     if (socket.currLobby) {
       try {
-        var lobby = getLobby(socket.currLobby);
+        var lobby = lobbyService.getLobby(socket.currLobby);
         removeParticipant(socket.id, lobby);
         if (lobby.participants.length == 0) {
           lobbyService.close(socket.currLobby);
@@ -190,7 +191,7 @@ module.exports = function lobbyService() {
       if (socket.currLobby) {
         throw new Error("already in a lobby");
       }
-      var lobby = getLobby(lobbyId);
+      var lobby = lobbyService.getLobby(lobbyId);
       socket.services.validation.checkDuplicate(lobby.id, socket.id); //to check if client is already in that lobby
       for (let index = 0; index < lobby.participants.length; index++) {
         let participant = lobby.participants[index];

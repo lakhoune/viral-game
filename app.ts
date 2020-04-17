@@ -16,7 +16,7 @@ const io = socket(server);
 const chat = io.of("/admin");
 const game = io.of("/game");
 //Service Middleware
-game.use(require("./middleware/serviceMiddleware")());
+game.use(require("../middleware/serviceMiddleware.js")());
 
 game.on("connection", (socket) => {
   console.log(socket.id, " connected");
