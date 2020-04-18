@@ -1,6 +1,6 @@
 module.exports = function gameService() {
-  import Game from "../models/Game";
-  import Team from "../models/Team";
+  const Game = require("../dist/models/Game");
+  const Team = require("../dist/models/Team");
   const io = require("socket.io")();
   //random shuffle algorithm found online
   function shuffle(array) {

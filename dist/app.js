@@ -10,10 +10,10 @@ app.use(express.static("static"));
 const io = socket(server);
 //Namespaces
 const chat = io.of("/admin");
-const game = io.of("/game");
+const gameSocket = io.of("/game");
 //Service Middleware
-game.use(require("../middleware/serviceMiddleware.js")());
-game.on("connection", (socket) => {
+gameSocket.use(require("../middleware/serviceMiddleware.js")());
+gameSocket.on("connection", (socket) => {
     console.log(socket.id, " connected");
     socket.emit("log", "Successfully connected, socket id: " + socket.id);
     socket.on("test", (...args) => {
@@ -44,7 +44,7 @@ game.on("connection", (socket) => {
                 socket.emit("log", "Got session id: " + sessionId);
                 socket.emit("token", sessionId);
                 socket.emit("lobbyID", lobby.id);
-                game
+                gameSocket
                     .to(lobbyId)
                     .emit("log", "Lobby size: " + lobby.participants.length);
             }
@@ -66,7 +66,30 @@ game.on("connection", (socket) => {
                     .to(socket.currLobby)
                     .emit("newName", name);
                 if (status == "ready") {
-                    socket.broadcast.to(socket.currLobby).emit("log", "Lobby is ready");
+                    socket.broadcast
+                        .to(socket.currLobby)
+                        .emit("log", "Lobby is ready, starting soon...");
+                    socket.services.game.createGame(socket, (err, game) => {
+                        if (err) {
+                            socket.emit("err", err, err.message);
+                        }
+                        else {
+                            let names1 = [];
+                            for (const member of game.DNA.members) {
+                                names1.push(member.name);
+                            }
+                            let names2 = [];
+                            for (const member of game.RNA.members) {
+                                names2.push(member.name);
+                            }
+                            socket.broadcast
+                                .to(`${socket.currLobby}.DNA`)
+                                .emit("log", "Your team: " + names1);
+                            socket.broadcast
+                                .to(`${socket.currLobby}.RNA`)
+                                .emit("log", "Your team: " + names2);
+                        }
+                    });
                 }
             }
         });

@@ -1,8 +1,8 @@
 //Service to manage lobby
 
 module.exports = function lobbyService() {
-  const Lobby = require("../models/Lobby");
-  const Participant = require("../models/Participant");
+  const Lobby = require("../dist/models/Lobby");
+  const Participant = require("../dist/models/Participant");
 
   var lobbies = [];
   const LobbySizes = [4, 6, 8];
