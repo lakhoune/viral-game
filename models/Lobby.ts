@@ -12,5 +12,6 @@ export class Lobby {
     this.id = id;
     this.capacity = capacity;
     this.status = "00";
+    this.participants = [];
   }
 }

@@ -37,7 +37,8 @@ gameSocket.on("connection", (socket) => {
       id,
       (err, lobby, sessionId) => {
         if (err) {
-          socket.emit("err", err);
+          console.log("createLobby:", err);
+          socket.emit("err", err, err.message);
         } else {
           socket.emit("log", "Created lobby, lobby id: " + lobby.id);
           socket.emit("log", "Got session id: " + sessionId);
@@ -54,7 +55,8 @@ gameSocket.on("connection", (socket) => {
       lobbyId,
       (err, lobby, sessionId) => {
         if (err) {
-          socket.emit("err", err.message);
+          console.log("joinLobby:", err);
+          socket.emit("err", err, err.message);
         } else {
           socket.broadcast.to(lobby.id).emit("log", "Member joined lobby ");
           socket.emit("log", "Joined lobby id: " + lobby.id);
@@ -72,7 +74,7 @@ gameSocket.on("connection", (socket) => {
   socket.on("setName", (name) => {
     socket.services.lobby.setName(socket, name, (err, name, status) => {
       if (err) {
-        console.log(err);
+        console.log("setName:", err);
         socket.emit("err", err);
       } else {
         socket.emit("log", "name set to: " + name);
@@ -89,6 +91,7 @@ gameSocket.on("connection", (socket) => {
             .emit("log", "Lobby is ready, starting soon...");
           socket.services.game.createGame(socket, (err, game) => {
             if (err) {
+              console.log("createGame:", err);
               socket.emit("err", err, err.message);
             } else {
               let names1 = [];
@@ -115,6 +118,7 @@ gameSocket.on("connection", (socket) => {
   socket.on("getLobbySize", () => {
     socket.services.lobby.getLobbySize(socket, (err, capacity) => {
       if (err) {
+        console.log("getLobbySize:", err);
         socket.emit("err", err);
       } else {
         socket.emit("data", capacity);
@@ -125,6 +129,7 @@ gameSocket.on("connection", (socket) => {
   socket.on("rejoinLobby", (sessionId, lobbyId) => {
     socket.services.lobby.rejoinLobby(socket, lobbyId, sessionId, (err) => {
       if (err) {
+        console.log("rejoinLobby:", err);
         socket.emit("err", err.message);
       } else {
         socket.broadcast.to(lobbyId).emit("log", "Member rejoined lobby ");
@@ -137,6 +142,7 @@ gameSocket.on("connection", (socket) => {
   socket.on("getNames", (lobbyId) => {
     socket.services.lobby.getParticipantNames(socket, lobbyId, (err, names) => {
       if (err) {
+        console.log("getNames:", err);
         socket.emit("err", err.message);
       } else {
         socket.emit("names", names);
@@ -148,7 +154,7 @@ gameSocket.on("connection", (socket) => {
     if (data == "transport close") {
       socket.services.lobby.removeFromLobby(socket, (err) => {
         if (err) {
-          console.log(err);
+          console.log("removeFromLobby:", err);
         }
         socket.broadcast.to(tmp).emit("log", "Member left lobby ");
       });
