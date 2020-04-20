@@ -11,6 +11,7 @@ import {  HostBinding } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Subject } from 'rxjs';
 import {GameService} from '../game.service';
+import {TimerService} from '../timer.service';
 
 @Component({
   selector: 'app-lobby',
@@ -25,14 +26,18 @@ export class LobbyComponent implements OnInit {
     
 
 
-constructor() { 
+constructor(private timer:TimerService) { 
+    
     document.body.style.height ="100%";
     document.body.style.backgroundColor ="rgba(226,176,255,0.4)"; 
 
 }
 
   ngOnInit() {
+        
       
+        this.timer.startTimer(20);
+        
         $(document).ready(function(){
               
             //add cells to the DOM 

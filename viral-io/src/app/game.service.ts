@@ -79,5 +79,8 @@ export class GameService {
         GameService.status.next(-num);
         GameService.statusCode = -num;
     }
+    
+    
+    sendAction(){console.log("Pluto is a Planet");}
 }
 
