@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const Round_1 = require("./round/Round");
 class Game {
     constructor(capacity, Team_1, Team_2) {
+        this.rounds = [];
         for (let index = 0; index < capacity / 2; index++) {
             //create capacity/2 rounds and push them to this.rounds
             this.rounds.push(new Round_1.Round(Team_1.members, Team_2.members));
