@@ -67,7 +67,7 @@ gameSocket.on("connection", (socket) => {
                 socket.broadcast //send name to all other users
                     .to(socket.currLobby)
                     .emit("newName", name);
-                if (status == "ready") {
+                if (status == "20") {
                     socket.broadcast
                         .to(socket.currLobby)
                         .emit("log", "Lobby is ready, starting soon...");
