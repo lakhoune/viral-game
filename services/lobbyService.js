@@ -8,16 +8,16 @@ module.exports = function lobbyService() {
   const LobbySizes = [4, 6, 8];
 
   function updateLobbyStatus(lobby) {
-    if (lobby.participants.length < lobby.size) {
+    if (lobby.participants.length < lobby.capacity) {
+      lobby.status = "10";
       return;
     } else {
-      lobby.status = "all members connected";
       for (let participant of lobby.participants) {
         if (!participant.name) {
           return;
         }
       }
-      lobby.status = "ready";
+      lobby.status = "20";
     }
   }
 
