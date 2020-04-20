@@ -149,9 +149,7 @@ module.exports = function lobbyService() {
   lobbyService.getParticipantNames = async (socket, lobbyId, callback) => {
     try {
       if (!(socket.currLobby == lobbyId)) {
-        throw new Error(
-          "Unauthorized: You are not a member of lobby " + lobbyId
-        );
+        throw new Error("Unauthorized: You are not a member of lobby " + lobbyId);
       }
       let lobby = lobbyService.getLobby(lobbyId);
       let names = [];
@@ -168,8 +166,15 @@ module.exports = function lobbyService() {
   lobbyService.close = (lobbyId) => {
     console.log("closing empty lobby in 5 minutes");
     setTimeout(() => {
-      console.log(lobbyId + " closed");
-      removeLobby(lobbyId);
+      try {
+        let lobby = lobbyService.getLobby(lobbyId);
+        if (lobby.participants.length == 0) {
+          console.log(lobbyId + " closed");
+          removeLobby(lobbyId);
+        }
+      } catch (error) {
+        console.log("close lobby: ", error);
+      }
     }, 300000);
   };
 
@@ -191,18 +196,16 @@ module.exports = function lobbyService() {
   lobbyService.rejoinLobby = (socket, lobbyId, sessionId, callback) => {
     try {
       if (socket.currLobby) {
-        throw new Error("already in a lobby");
+        throw new Error("already in lobby " + socket.currLobby);
       }
       var lobby = lobbyService.getLobby(lobbyId);
       socket.services.validation.checkDuplicate(lobby.id, socket.id); //to check if client is already in that lobby
-      for (let index = 0; index < lobby.participants.length; index++) {
-        let participant = lobby.participants[index];
-
+      for (let participant of lobby.participants) {
         if (participant.sessionId == sessionId) {
           participant.socketId = socket.id; //overwrite old socket id of participant
           socket.join(lobbyId, () => {
             socket.currLobby = lobbyId;
-            callback(false);
+            callback(null);
           });
         }
       }

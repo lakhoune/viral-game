@@ -24,51 +24,37 @@ gameSocket.on("connection", (socket) => {
 
   socket.on("test", (...args) => {
     console.log("running test");
-    socket.services.validation.checkInfix(
-      args[0] || "halloJungs",
-      args[1] || "jungs"
-    );
+    socket.services.validation.checkInfix(args[0] || "halloJungs", args[1] || "jungs");
   });
 
   socket.on("createLobby", (id, size) => {
-    socket.services.lobby.createLobby(
-      socket,
-      size,
-      id,
-      (err, lobby, sessionId) => {
-        if (err) {
-          console.log("createLobby:", err);
-          socket.emit("err", err, err.message);
-        } else {
-          socket.emit("log", "Created lobby, lobby id: " + lobby.id);
-          socket.emit("log", "Got session id: " + sessionId);
-          socket.emit("lobbyID", lobby.id);
-          socket.emit("token", sessionId);
-        }
+    socket.services.lobby.createLobby(socket, size, id, (err, lobby, sessionId) => {
+      if (err) {
+        console.log("createLobby:", err);
+        socket.emit("err", err, err.message);
+      } else {
+        socket.emit("log", "Created lobby, lobby id: " + lobby.id);
+        socket.emit("log", "Got session id: " + sessionId);
+        socket.emit("lobbyID", lobby.id);
+        socket.emit("token", sessionId);
       }
-    );
+    });
   });
 
   socket.on("joinLobby", (lobbyId) => {
-    socket.services.lobby.joinLobby(
-      socket,
-      lobbyId,
-      (err, lobby, sessionId) => {
-        if (err) {
-          console.log("joinLobby:", err);
-          socket.emit("err", err, err.message);
-        } else {
-          socket.broadcast.to(lobby.id).emit("log", "Member joined lobby ");
-          socket.emit("log", "Joined lobby id: " + lobby.id);
-          socket.emit("log", "Got session id: " + sessionId);
-          socket.emit("token", sessionId);
-          socket.emit("lobbyID", lobby.id);
-          gameSocket
-            .to(lobbyId)
-            .emit("log", "Lobby size: " + lobby.participants.length);
-        }
+    socket.services.lobby.joinLobby(socket, lobbyId, (err, lobby, sessionId) => {
+      if (err) {
+        console.log("joinLobby:", err);
+        socket.emit("err", err, err.message);
+      } else {
+        socket.broadcast.to(lobby.id).emit("log", "Member joined lobby ");
+        socket.emit("log", "Joined lobby id: " + lobby.id);
+        socket.emit("log", "Got session id: " + sessionId);
+        socket.emit("token", sessionId);
+        socket.emit("lobbyID", lobby.id);
+        gameSocket.to(lobbyId).emit("log", "Lobby size: " + lobby.participants.length);
       }
-    );
+    });
   });
 
   socket.on("setName", (name) => {
@@ -79,16 +65,13 @@ gameSocket.on("connection", (socket) => {
       } else {
         socket.emit("log", "name set to: " + name);
         socket.emit("newName", name); //send name to user
-        socket.broadcast
-          .to(socket.currLobby)
-          .emit("log", name + " joined lobby ");
+        socket.broadcast.to(socket.currLobby).emit("log", name + " joined lobby ");
         socket.broadcast //send name to all other users
           .to(socket.currLobby)
           .emit("newName", name);
+
         if (status == "20") {
-          socket.broadcast
-            .to(socket.currLobby)
-            .emit("log", "Lobby is ready, starting soon...");
+          socket.broadcast.to(socket.currLobby).emit("log", "Lobby is ready, starting soon...");
           socket.services.game.createGame(socket, (err, game) => {
             if (err) {
               console.log("createGame:", err);
@@ -102,12 +85,8 @@ gameSocket.on("connection", (socket) => {
               for (const member of game.RNA.members) {
                 names2.push(member.name);
               }
-              socket.broadcast
-                .to(`${socket.currLobby}.DNA`)
-                .emit("log", "Your team: " + names1);
-              socket.broadcast
-                .to(`${socket.currLobby}.RNA`)
-                .emit("log", "Your team: " + names2);
+              socket.broadcast.to(`${socket.currLobby}.DNA`).emit("log", "Your team: " + names1);
+              socket.broadcast.to(`${socket.currLobby}.RNA`).emit("log", "Your team: " + names2);
             }
           });
         }
