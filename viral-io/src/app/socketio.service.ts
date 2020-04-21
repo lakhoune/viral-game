@@ -16,11 +16,13 @@ export class SocketioService {
     socket;
     admin;
     static lobbySize;
-    static participants:string[]= [null];
-    static observable = from(SocketioService.participants);
-    static subject = new Subject<string>();
     static lobbyID;
-    playerNAME;
+    
+    static participants:string[]= [null];
+    //static observable = from(SocketioService.participants);
+    static subject = new Subject<string>();
+    
+    //playerNAME;
     
 constructor(private auth: SessionauthService, private game: GameService) {      }
     
@@ -28,12 +30,14 @@ constructor(private auth: SessionauthService, private game: GameService) {      
         
         //create sockets
         this.socket = io(environment.SOCKET_ENDPOINT);
-        this.admin = io(environment.SOCKET_ADMIN_ENDPOINT);
+        this.admin = io(environment.SOCKET_ADMIN_ENDPOINT); //chat
         
         
-        this.admin.on("chat", (data) => {
+       /* this.admin.on("chat", (data) => {
             console.log("admin chat: "+data);
-        });
+        });*/
+        
+        //chat
         this.admin.on("log", (data) => {
             console.log("admin log: "+data);
         });
@@ -89,6 +93,8 @@ constructor(private auth: SessionauthService, private game: GameService) {      
           //store this data as lobby size in a globally accessable variable //satic var of SocketioService
             SocketioService.lobbySize = size; 
             console.log(SocketioService.lobbySize);
+            GameService.lobby.size=size;
+            
         });
         
         
@@ -109,14 +115,15 @@ constructor(private auth: SessionauthService, private game: GameService) {      
   }
     
     
-    createLobby(num){
+    createLobby(size){
     
         let rand = Math.floor(Math.random() * 10000);
-        this.socket.emit("createLobby", rand, num);
-        console.log("test connection here, create adminchat");
-        console.log("Joe");
-        console.log(num);
-        console.log("Exotic");
+        this.socket.emit("createLobby", rand, size);
+        //console.log("test connection here, create adminchat");
+        //console.log("Joe");
+        GameService.createLobby(rand);
+        console.log('size: '+size);
+        //console.log("Exotic");
         this.getLobbySize();
 
     }
@@ -131,6 +138,7 @@ constructor(private auth: SessionauthService, private game: GameService) {      
         } else {
     
             this.socket.emit("joinLobby", num);
+            GameService.createLobby(num);
             this.getLobbySize();
             this.getNames(num);
         }
@@ -140,11 +148,12 @@ constructor(private auth: SessionauthService, private game: GameService) {      
     
     setName(name){
         this.socket.emit("setName", name);
+        GameService.createPlayer(name);
     }   
     
     getLobbySize(){
         this.socket.emit("getLobbySize");
-        console.log("diarrea");
+       // console.log("diarrea");
     }
     getNames(id){
         this.socket.emit("getNames", id);

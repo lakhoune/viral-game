@@ -5,7 +5,7 @@ export class player {
     status:any;
     SocketID:any;
     
-constructor(name,token,SocketID){
+constructor(name){
     
     }
 }

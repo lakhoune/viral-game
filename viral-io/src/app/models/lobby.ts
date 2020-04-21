@@ -9,9 +9,10 @@ export class lobby {
     participants:player[];//set type
     game:game;
 
-constructor(id:number,capacity:number){
+constructor(id:number){
         this.id=id;
-        this.capacity=capacity;
-        this.status = 1;
+        //this.capacity=capacity;
+        this.status = 10;
     }
+  
 }
