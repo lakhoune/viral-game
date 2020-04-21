@@ -9,7 +9,8 @@
       "request": "launch",
       "name": "Debug Server",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\dist\\app.js"
+      "program": "${workspaceFolder}\\dist\\app.js",
+      "preLaunchTask": "npm: build"
     }
   ]
 }

@@ -10,42 +10,13 @@ module.exports = function gameService() {
       [array[i], array[j]] = [array[j], array[i]];
     }
   }
-  function getSocket(socketId, roomId) {
-    return getSocketsInRoom(roomId)[socketId];
-  }
-  function getSocketsInRoom(roomId) {
-    return Object.keys(io.of("/game").in(roomId).sockets.sockets);
-  }
-  //assigns clients to room
-  async function assignClients(lobby) {
-    for (let member of lobby.game.DNA.members) {
-      let socket = getSocketsInRoom(lobby.id)[member.socketId]; //get socket of participant
-      await socket.join(`${lobby.id}.DNA`); //join room for team dna
-      socket.emit("log", "Joined Team DNA");
-    }
-    for (let member of lobby.game.RNA.members) {
-      let socket = getSocketsInRoom(lobby.id)[member.socketId]; //get socket of participant
-      await socket.join(`${lobby.id}.DNA`); //join room for team dna
-      socket.emit("log", "Joined Team DNA");
-    }
-    // await lobby.game.DNA.members.forEach((participant) => {
-    //   //for each participant of team DNA
-    //   let socket = getSocket(participant.socketId, lobby.id); //get socket of participant
-    //   await socket.join(`${lobby.id}.DNA`); //join room for team dna
-    //   socket.emit("log", "Joined Team DNA");
-    // });
 
-    // await lobby.game.RNA.members.forEach((participant) => {
-    //   //for each participant of team RNA
-    //   let socket = getSocket(participant.socketId, lobby.id); //get socket of participant
-    //   await socket.join(`${lobby.id}.RNA`); //Join room for team rna
-    //   socket.emit("log", "Joined Team RNA");
-    // });
-  }
-
-  gameService.createGame = async (socket, callback) => {
+  gameService.createGame = (socket, callback) => {
     try {
       let lobby = socket.services.lobby.getLobby(socket.currLobby);
+      if (!lobby) {
+        throw new Error("lobby non existant");
+      }
       let participants = lobby.participants;
       shuffle(participants);
       let middle = participants.length / 2;
@@ -53,9 +24,6 @@ module.exports = function gameService() {
       let Team2 = new Team(participants.slice(middle, participants.length));
       let game = new Game(participants.length, Team1, Team2);
       lobby.game = game;
-      await assignClients(lobby);
-      //console.log(getSocketsInRoom(`${lobby.id}.DNA`));
-      //console.log(getSocketsInRoom(`${lobby.id}.RNA`));
       callback(null, game);
     } catch (error) {
       callback(error, null);
