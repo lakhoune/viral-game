@@ -11,6 +11,27 @@ import { Subject } from 'rxjs';
 import { interval } from 'rxjs';
 import { from } from 'rxjs';
 
+
+
+import {game} from "./models/game";
+import {lobby} from "./models/lobby";
+import {team} from "./models/team";
+
+import {player} from "./models/player/player";
+import {role} from "./models/player/role";
+import {researcher} from "./models/player/researcher";
+import {virus} from "./models/player/virus";
+
+import {round} from "./models/round/round";
+import {board} from "./models/round/board";
+import {score} from "./models/round/score";
+
+
+import {target} from "./models/targetData/target";
+import {metaTarget} from "./models/targetData/metaTarget";
+import {researchTarget} from "./models/targetData/researchTarget";
+import {virusTarget} from "./models/targetData/virusTarget";
+
 //https://angular.io/guide/observables-in-angular   /////transmitting data between components
 @Injectable({
   providedIn: 'root'
@@ -34,10 +55,27 @@ export class GameService {
     
     //-x error    
     
+    static lobby;
+    static game;
+    static team;
+    static player;
+    
+    
+    
     
     constructor(private auth: SessionauthService) {      
         
     }
+    
+    
+    static createLobby(id){
+        GameService.lobby = new lobby(id);
+    }
+    
+    static createPlayer(name){
+        GameService.player = new player(name);
+    }
+    
     
     nextRound(){
         GameService.status.next(GameService.statusCode+100);
