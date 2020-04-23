@@ -26,7 +26,7 @@ export class LobbyComponent implements OnInit {
     
 
 
-constructor(private timer:TimerService) { 
+constructor(private timer:TimerService, private game:GameService) { 
     
     document.body.style.height ="100%";
     document.body.style.backgroundColor ="rgba(226,176,255,0.4)"; 
@@ -36,7 +36,7 @@ constructor(private timer:TimerService) {
   ngOnInit() {
         
       
-        this.timer.startTimer(20);
+        
         
         $(document).ready(function(){
               

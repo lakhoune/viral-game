@@ -67,6 +67,7 @@ constructor(private auth: SessionauthService, private game: GameService) {      
             //console.log("weeb");
             //console.log(msg);
             console.log(SocketioService.participants);
+            //this.game.startGame(); //only for testing
         });
         
         
@@ -81,6 +82,8 @@ constructor(private auth: SessionauthService, private game: GameService) {      
             if(s==20){
                 this.game.startGame();
             }
+            console.log(s);
+            this.game.startGame();
         });
         
         //save lobby ID

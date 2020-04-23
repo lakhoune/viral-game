@@ -11,6 +11,8 @@ import { Subject } from 'rxjs';
 import { interval } from 'rxjs';
 import { from } from 'rxjs';
 
+import * as $ from 'jquery';
+import 'jquery-ui-dist/jquery-ui.js';
 
 
 import {game} from "./models/game";
@@ -32,6 +34,7 @@ import {metaTarget} from "./models/targetData/metaTarget";
 import {researchTarget} from "./models/targetData/researchTarget";
 import {virusTarget} from "./models/targetData/virusTarget";
 
+import {TimerService} from './timer.service';
 //https://angular.io/guide/observables-in-angular   /////transmitting data between components
 @Injectable({
   providedIn: 'root'
@@ -63,7 +66,7 @@ export class GameService {
     
     
     
-    constructor(private auth: SessionauthService) {      
+constructor(private auth: SessionauthService, private timer:TimerService) {      
         
     }
     
@@ -101,6 +104,9 @@ export class GameService {
     startGame(){
         GameService.status.next(3000);
         GameService.statusCode = 3000;
+        $("#countdown").html('<small style="font-size:.3em;">Spiel startet in:</small>');
+        this.timer.startTimer(20);
+        
     }
     endGame(){
         GameService.status.next(40);

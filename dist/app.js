@@ -91,7 +91,9 @@ gameSocket.on("connection", (socket) => {
                             let lobby = socket.services.lobby.getLobby(socket.currLobby);
                             assignClients(lobby);
                             socket.broadcast.to(`${socket.currLobby}.DNA`).emit("log", "Your team: " + names1);
+                            setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.DNA`).emit("status", names1)},1000);
                             socket.broadcast.to(`${socket.currLobby}.RNA`).emit("log", "Your team: " + names2);
+                            setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.RNA`).emit("status", names2)},1000);
                         }
                     });
                 }
