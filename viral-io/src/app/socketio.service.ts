@@ -75,7 +75,7 @@ constructor(private auth: SessionauthService, private game: GameService) {      
         
         //save session token in local storage
         this.socket.on("token", (token) => {  
-                SessionauthService.setID(token);
+                //SessionauthService.setID(token); //disabled for testing
                 console.log(SessionauthService.readID());
         });
         this.socket.on("status", (s) => {  
