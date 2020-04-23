@@ -3,6 +3,8 @@ import { timer } from 'rxjs';
 import { interval } from 'rxjs';
 import { take } from 'rxjs/operators';
 import {GameService} from './game.service';
+import * as $ from 'jquery';
+import 'jquery-ui-dist/jquery-ui.js';
 @Injectable({
   providedIn: 'root'
 })
@@ -15,7 +17,7 @@ constructor(private game:GameService) { }
     
     startTimer(time){
         
-        const takeFirst3$ = this.timer$.pipe(take(time+1)).subscribe(value => console.log(time-value));
+        const takeFirst3$ = this.timer$.pipe(take(time+1)).subscribe(value => $("#countdown").html(time-value));
         const send = timer((time*1000)+1000).subscribe(value => this.game.sendAction());
     }
     
