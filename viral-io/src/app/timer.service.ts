@@ -17,7 +17,7 @@ constructor() { }
     
     startTimer(time){
         
-        const takeFirst3$ = this.timer$.pipe(take(time+1)).subscribe(value => $("#countdown").html(time-value));
+        const takeFirst3$ = this.timer$.pipe(take(time+1)).subscribe(value => $(".countdown").html(time-value));
        // const send = timer((time*1000)+1000).subscribe(value => this.game.sendAction());
     }
     

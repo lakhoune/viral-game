@@ -44,6 +44,7 @@ constructor(private timer:TimerService, private game:GameService) {
             console.log("#neverForgetHarambe");
             console.log(SocketioService.participants);
             console.log("Epstein didn't kill himself");
+            console.log("&#1f976");
             //add those that are already in a lobby
             var i=0
             SocketioService.participants.forEach(function(element){

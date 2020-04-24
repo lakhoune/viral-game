@@ -57,7 +57,12 @@ export class GameService {
     //50 leave/left lobby -> return to state 0    
     
     //-x error    
-    
+    /*
+                            socket.broadcast.to(`${socket.currLobby}.DNA`).emit("log", "Your team: " + names1);
+                            setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.DNA`).emit("status", '{"code":20,"team":'+JSON.stringify(names1)+',"timer":20}')},3000);
+                            socket.broadcast.to(`${socket.currLobby}.RNA`).emit("log", "Your team: " + names2);
+                            setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.RNA`).emit("status", '{"code":20,"team":'+JSON.stringify(names2)+',"timer":20}')},3000);
+*/
     static lobby;
     static game;
     static team;
@@ -70,7 +75,13 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
         
     }
     
-    
+    parse(status){
+        console.log(status);
+        console.log(status.code);
+        if(status.code==20){
+            this.startGame();
+        }
+    }
     static createLobby(id){
         GameService.lobby = new lobby(id);
     }
