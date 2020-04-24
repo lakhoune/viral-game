@@ -85,7 +85,7 @@ gameSocket.on("connection", (socket) => {
                 names2.push(member.name);
               }
               let lobby = socket.services.lobby.getLobby(socket.currLobby);
-              await assignClients(lobby);
+              assignClients(lobby);
               socket.broadcast.to(`${socket.currLobby}.DNA`).emit("log", "Your team: " + names1);
               socket.broadcast.to(`${socket.currLobby}.RNA`).emit("log", "Your team: " + names2);
             }
@@ -148,12 +148,14 @@ chat.on("connection", (socket) => {
     chat.emit("log", socket.id + " says: " + data);
   });
 });
+
 function getSocketsInRoom(room) {
   return io.of("/game").in(room).connected;
 }
 function getSocket(socketId, room) {
   return getSocketsInRoom(room)[socketId];
 }
+
 async function logClients(room) {
   await io
     .of("/game")
@@ -172,13 +174,21 @@ async function assignClients(lobby) {
 
   for (let member of lobby.game.DNA.members) {
     let socket = getSocket(member.socketId, lobby.id); //get socket of participant
-    await socket.join(`${lobby.id}.DNA`); //join room for team dna
-    socket.emit("log", "Joined Team DNA");
+    if (socket) {
+      await socket.join(`${lobby.id}.DNA`); //join room for team dna
+      socket.emit("log", "Joined Team DNA");
+    } else {
+      console.log("socket undefined", member.socketId);
+    }
   }
   for (let member of lobby.game.RNA.members) {
     let socket = getSocket(member.socketId, lobby.id); //get socket of participant
-    await socket.join(`${lobby.id}.RNA`); //join room for team dna
-    socket.emit("log", "Joined Team RNA");
+    if (socket) {
+      await socket.join(`${lobby.id}.RNA`); //join room for team dna
+      socket.emit("log", "Joined Team RNA");
+    } else {
+      console.log("socket undefined", member.socketId);
+    }
   }
   console.log("DNA members: ");
   await logClients(`${lobby.id}.DNA`);
