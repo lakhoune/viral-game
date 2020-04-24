@@ -74,7 +74,7 @@ gameSocket.on("connection", (socket) => {
                     .emit("newName", name);
                 if (status == "20") {
                     socket.broadcast.to(socket.currLobby).emit("log", "Lobby is ready, starting soon...");
-                    socket.services.game.createGame(socket, (err, game) => {
+                    socket.services.game.createGame(socket, (err, game) => __awaiter(this, void 0, void 0, function* () {
                         if (err) {
                             console.log("createGame:", err);
                             socket.emit("err", err, err.message);
@@ -89,13 +89,11 @@ gameSocket.on("connection", (socket) => {
                                 names2.push(member.name);
                             }
                             let lobby = socket.services.lobby.getLobby(socket.currLobby);
-                            assignClients(lobby);
+                            yield assignClients(lobby);
                             socket.broadcast.to(`${socket.currLobby}.DNA`).emit("log", "Your team: " + names1);
-                            setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.DNA`).emit("status", names1)},1000);
                             socket.broadcast.to(`${socket.currLobby}.RNA`).emit("log", "Your team: " + names2);
-                            setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.RNA`).emit("status", names2)},1000);
                         }
-                    });
+                    }));
                 }
             }
         });
@@ -157,8 +155,7 @@ function getSocketsInRoom(room) {
     return io.of("/game").in(room).connected;
 }
 function getSocket(socketId, room) {
-    let s = getSocketsInRoom(room)[socketId];
-    return s;
+    return getSocketsInRoom(room)[socketId];
 }
 function logClients(room) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -179,14 +176,14 @@ function assignClients(lobby) {
         console.log("RNA members: ");
         yield logClients(`${lobby.id}.RNA`);
         for (let member of lobby.game.DNA.members) {
-            let socket1 = getSocket(member.socketId, lobby.id); //get socket of participant
-            yield socket1.join(`${lobby.id}.DNA`); //join room for team dna
-            socket1.emit("log", "Joined Team DNA");
+            let socket = getSocket(member.socketId, lobby.id); //get socket of participant
+            yield socket.join(`${lobby.id}.DNA`); //join room for team dna
+            socket.emit("log", "Joined Team DNA");
         }
         for (let member of lobby.game.RNA.members) {
-            let socket2 = getSocket(member.socketId, lobby.id); //get socket of participant
-            yield socket2.join(`${lobby.id}.RNA`); //join room for team dna
-            socket2.emit("log", "Joined Team RNA");
+            let socket = getSocket(member.socketId, lobby.id); //get socket of participant
+            yield socket.join(`${lobby.id}.RNA`); //join room for team dna
+            socket.emit("log", "Joined Team RNA");
         }
         console.log("DNA members: ");
         yield logClients(`${lobby.id}.DNA`);

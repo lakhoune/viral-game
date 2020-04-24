@@ -26,7 +26,10 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": ["./node_modules/jquery/dist/jquery.min.js", "./node_modules/jquery-ui-dist/jquery-ui.js"]
+            "scripts": [
+              "./node_modules/jquery/dist/jquery.min.js",
+              "./node_modules/jquery-ui-dist/jquery-ui.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -91,7 +94,10 @@
             "styles": [
               "src/styles.css"
             ],
-            "scripts": ["./node_modules/jquery/dist/jquery.min.js", "./node_modules/jquery-ui-dist/jquery-ui.js" ]
+            "scripts": [
+              "./node_modules/jquery/dist/jquery.min.js",
+              "./node_modules/jquery-ui-dist/jquery-ui.js"
+            ]
           }
         },
         "lint": {
@@ -120,6 +126,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "viral-io"
+    }
+  },
+  "defaultProject": "viral-io",
+  "cli": {
+    "analytics": "6aac3c63-4725-4f89-8aa7-03e705a42ac2"
+  }
 }
