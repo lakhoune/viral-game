@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewChecked, AfterContentInit, AfterViewInit } from '@angular/core';
 import { Router, ActivatedRoute, ParamMap } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import {SocketioService} from '../socketio.service';
@@ -11,36 +11,32 @@ import { FormsModule } from '@angular/forms';
 })
 export class EnterLobbyComponent implements OnInit {
 
-    title:string ="Title";
+    title = "Title";
     pin;
+    pinSub;
     size;
     name;
-    
+
   constructor(  private route: ActivatedRoute,
-  private router: Router, private socketService: SocketioService) { }
+                private router: Router, private socketService: SocketioService) {
+   }
 
   ngOnInit() {
-      
-      let id = this.route.snapshot.paramMap.get('size');
-   // console.log(id);
-    this.size=id;
-      
-    
-    this.pin=SocketioService.lobbyID;
-      
-    //console.log(this.size)
+
+      const id = this.route.snapshot.paramMap.get('size');
+      this.size = id;
+      this.pinSub = this.socketService.getlobbyIDListener()
+       .subscribe((ID) => {
+      this.pin = ID;
+    });
   }
-    
-    
-getPin(){return SocketioService.lobbyID;}
-getSize(){return SocketioService.lobbySize}    
-    
-enterName(){
-    
-    
+
+getPin() {return SocketioService.lobbyID; }
+getSize() {return SocketioService.lobbySize;
+}
+
+enterName() {
     this.socketService.setName(this.name);
-    
-}    
+}
 
 }
- 
