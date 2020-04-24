@@ -110,7 +110,9 @@ gameSocket.on("connection", (socket) => {
                 let lobby = socket.services.lobby.getLobby(socket.currLobby);
                 yield assignClients(lobby);
                 socket.broadcast.to(`${socket.currLobby}.DNA`).emit("log", "Your team: " + names1);
+                setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.DNA`).emit("status", '{"code":20,"team":'+JSON.stringify(names1)+',"timer":20}')},3000);
                 socket.broadcast.to(`${socket.currLobby}.RNA`).emit("log", "Your team: " + names2);
+                setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.RNA`).emit("status", '{"code":20,"team":'+JSON.stringify(names2)+',"timer":20}')},3000);
               }
             })
           );
