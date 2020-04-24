@@ -79,11 +79,11 @@ constructor(private auth: SessionauthService, private game: GameService) {      
                 console.log(SessionauthService.readID());
         });
         this.socket.on("status", (s) => {  
-            if(s==20){
-                this.game.startGame();
-            }
+          
             console.log(s);
-            this.game.startGame();
+            status = JSON.parse(s);
+            console.log(status);
+            this.game.parse(status);
         });
         
         //save lobby ID

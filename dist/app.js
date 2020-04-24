@@ -89,11 +89,15 @@ gameSocket.on("connection", (socket) => {
                                 names2.push(member.name);
                             }
                             let lobby = socket.services.lobby.getLobby(socket.currLobby);
+                            console.log("it's a me");
+                            console.log(names1);
+                            console.log(names2);
+                            console.log("Mario!"); //works
                             assignClients(lobby);
                             socket.broadcast.to(`${socket.currLobby}.DNA`).emit("log", "Your team: " + names1);
-                            setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.DNA`).emit("status", names1)},1000);
+                            setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.DNA`).emit("status", '{"code":20,"team":'+JSON.stringify(names1)+',"timer":20}')},3000);
                             socket.broadcast.to(`${socket.currLobby}.RNA`).emit("log", "Your team: " + names2);
-                            setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.RNA`).emit("status", names2)},1000);
+                            setTimeout(function(){socket.broadcast.to(`${socket.currLobby}.RNA`).emit("status", '{"code":20,"team":'+JSON.stringify(names2)+',"timer":20}')},3000);
                         }
                     });
                 }
