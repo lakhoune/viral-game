@@ -24,7 +24,7 @@ module.exports = function gameService() {
       let Team2 = new Team(participants.slice(middle, participants.length));
       let game = new Game(participants.length, Team1, Team2);
       lobby.game = game;
-      callback(null, game);
+      callback(null, lobby);
     } catch (error) {
       callback(error, null);
     }

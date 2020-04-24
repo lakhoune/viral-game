@@ -1,5 +1,6 @@
 const express = require("express");
 const socket = require("socket.io");
+
 const app = express();
 
 //Express server
@@ -69,25 +70,19 @@ gameSocket.on("connection", (socket) => {
         socket.broadcast //send name to all other users
           .to(socket.currLobby)
           .emit("newName", name);
+
         if (status == "20") {
           socket.broadcast.to(socket.currLobby).emit("log", "Lobby is ready, starting soon...");
-          socket.services.game.createGame(socket, async (err, game) => {
+          socket.services.game.createGame(socket, (err, lobby) => {
             if (err) {
               console.log("createGame:", err);
               socket.emit("err", err, err.message);
             } else {
-              let names1 = [];
-              for (const member of game.DNA.members) {
-                names1.push(member.name);
-              }
-              let names2 = [];
-              for (const member of game.RNA.members) {
-                names2.push(member.name);
-              }
-              let lobby = socket.services.lobby.getLobby(socket.currLobby);
-              assignClients(lobby);
-              socket.broadcast.to(`${socket.currLobby}.DNA`).emit("log", "Your team: " + names1);
-              socket.broadcast.to(`${socket.currLobby}.RNA`).emit("log", "Your team: " + names2);
+              assignClients(lobby, (err) => {
+                if (err) {
+                  console.log(err);
+                }
+              });
             }
           });
         }
@@ -156,42 +151,47 @@ function getSocket(socketId, room) {
   return getSocketsInRoom(room)[socketId];
 }
 
-async function logClients(room) {
-  await io
-    .of("/game")
+function logClients(room, s) {
+  io.of("/game")
     .in(room)
     .clients((error, clients) => {
       if (error) throw error;
-
-      console.log(clients); // => [Anw2LatarvGVVXEIAAAD]
+      if (s == "DNA") {
+        console.log("DNA members: ", clients);
+      } else {
+        console.log("RNA members: ", clients);
+      }
     });
 }
-async function assignClients(lobby) {
-  console.log("DNA members: ");
-  await logClients(`${lobby.id}.DNA`);
-  console.log("RNA members: ");
-  await logClients(`${lobby.id}.RNA`);
+//assigns clients to their team room
+function assignClients(lobby, callback) {
+  try {
+    logClients(`${lobby.id}.DNA`, "DNA");
+    logClients(`${lobby.id}.RNA`, "RNA");
 
-  for (let member of lobby.game.DNA.members) {
-    let socket = getSocket(member.socketId, lobby.id); //get socket of participant
-    if (socket) {
-      await socket.join(`${lobby.id}.DNA`); //join room for team dna
-      socket.emit("log", "Joined Team DNA");
-    } else {
-      console.log("socket undefined", member.socketId);
+    for (let member of lobby.game.DNA.members) {
+      let sock = getSocket(member.socketId, lobby.id); //get socket of participant
+      if (sock) {
+        sock.join(`${lobby.id}.DNA`).emit("log", "Joined Team DNA"); //join room for team dna
+        sock.emit("log", "Your team: " + lobby.game.DNA.names);
+      } else {
+        throw new Error("sock undefined" + member.socketId);
+      }
     }
-  }
-  for (let member of lobby.game.RNA.members) {
-    let socket = getSocket(member.socketId, lobby.id); //get socket of participant
-    if (socket) {
-      await socket.join(`${lobby.id}.RNA`); //join room for team dna
-      socket.emit("log", "Joined Team RNA");
-    } else {
-      console.log("socket undefined", member.socketId);
+    for (let member of lobby.game.RNA.members) {
+      let sock = getSocket(member.socketId, lobby.id); //get socket of participant
+      if (sock) {
+        sock.join(`${lobby.id}.RNA`).emit("log", "Joined Team RNA"); //join room for team dna
+        sock.emit("log", "Your team: " + lobby.game.RNA.names);
+      } else {
+        throw new Error("sock undefined" + member.socketId);
+      }
     }
+
+    logClients(`${lobby.id}.DNA`, "DNA");
+    logClients(`${lobby.id}.RNA`, "RNA");
+    callback(null);
+  } catch (error) {
+    callback(error);
   }
-  console.log("DNA members: ");
-  await logClients(`${lobby.id}.DNA`);
-  console.log("RNA members: ");
-  await logClients(`${lobby.id}.RNA`);
 }
