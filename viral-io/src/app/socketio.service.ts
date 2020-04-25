@@ -81,15 +81,8 @@ constructor(private auth: SessionauthService, private game: GameService) {      
                 //SessionauthService.setID(token); //disabled for testing
                 console.log(SessionauthService.readID());
         });
-<<<<<<< HEAD
-        this.socket.on("status", (s) => {  
-          
-=======
+
         this.socket.on("status", (s) => {
-            if(s==20){
-                this.game.startGame();
-            }
->>>>>>> cdbc0ded9c99570ed8216b5a75df3dfa6fb1f743
             console.log(s);
             status = JSON.parse(s);
             console.log(status);
