@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
+
+import * as $ from 'jquery';
+import 'jquery-ui-dist/jquery-ui.js';
+
 @Component({
   selector: 'app-cell',
   templateUrl: './cell.component.html',
@@ -12,4 +16,9 @@ export class CellComponent implements OnInit {
   ngOnInit() {
   }
 
+rotate(){
+    
+    $("#begriff").style.transform = "rotate(7deg)";
+    
+}
 }
