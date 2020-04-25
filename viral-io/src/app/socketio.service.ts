@@ -78,20 +78,25 @@ constructor(private auth: SessionauthService, private game: GameService) {      
 
         //save session token in local storage
         this.socket.on("token", (token) => {
-                //SessionauthService.setID(token); //disabled for testing
+            
+                SessionauthService.setToken(token); //disabled for testing
+                
                 console.log(SessionauthService.readID());
         });
 
         this.socket.on("status", (s) => {
             console.log(s);
             status = JSON.parse(s);
-            console.log(status);
+            //console.log(status);
             this.game.parse(status);
         });
 
         //save lobby ID
         this.socket.on("lobbyID", (id) => {
                 SocketioService.lobbyID = id;
+            
+                SessionauthService.setID(id); //disabled for testing
+            
                 this.lobbyIDUpdated.next(SocketioService.lobbyID);
                 console.log(SocketioService.lobbyID);
         });
@@ -137,18 +142,19 @@ constructor(private auth: SessionauthService, private game: GameService) {      
 
     joinLobby(num){
 
-        if(SessionauthService.readID()){
+        /*if(SessionauthService.readID()==num){
             console.log(SessionauthService.readID());
+            console.log(SessionauthService.readToken());
             console.log(num);
-            this.socket.emit("rejoinLobby", SessionauthService.readID(), num);
+            this.socket.emit("rejoinLobby", SessionauthService.readToken(), SessionauthService.readID());
 
-        } else {
+        } else {*/
 
             this.socket.emit("joinLobby", num);
             GameService.createLobby(num);
             this.getLobbySize();
             this.getNames(num);
-        }
+        //}
 
     }
 

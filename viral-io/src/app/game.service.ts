@@ -76,11 +76,12 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
     }
     
     parse(status){
-        console.log(status);
+        //console.log(status);
         console.log(status.code);
         if(status.code==20){
             this.startGame();
         }
+        this.startGame();
     }
     static createLobby(id){
         GameService.lobby = new lobby(id);

@@ -165,6 +165,7 @@ function assignClients(lobby, callback) {
             if (sock) {
                 sock.join(`${lobby.id}.DNA`).emit("log", "Joined Team DNA"); //join room for team dna
                 sock.emit("log", "Your team: " + lobby.game.DNA.names);
+                sock.emit("status", '{"code":20, "team":'+JSON.stringify(lobby.game.DNA.names)+'}');
             }
             else {
                 throw new Error("sock undefined" + member.socketId);
@@ -175,6 +176,7 @@ function assignClients(lobby, callback) {
             if (sock) {
                 sock.join(`${lobby.id}.RNA`).emit("log", "Joined Team RNA"); //join room for team dna
                 sock.emit("log", "Your team: " + lobby.game.RNA.names);
+                sock.emit("status", '{"code":20, "team":'+JSON.stringify(lobby.game.RNA.names)+'}');
             }
             else {
                 throw new Error("sock undefined" + member.socketId);
