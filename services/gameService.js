@@ -32,7 +32,7 @@ module.exports = function gameService() {
         console.log("Eichel");
       let game = new Game(participants.length, Team1, Team2);
       lobby.game = game;
-      callback(null, game);
+      callback(null, lobby);
     } catch (error) {
       callback(error, null);
     }

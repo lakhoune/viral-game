@@ -1,9 +1,9 @@
 import { v4 as uuidv4 } from "uuid";
 
 export class Participant {
-  socketId: String;
-  sessionId: String;
-  name: String;
+  socketId: string;
+  sessionId: string;
+  name: string;
   status: any;
 
   constructor(socketId) {
