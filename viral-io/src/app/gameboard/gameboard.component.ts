@@ -9,8 +9,7 @@ import 'jquery-ui-dist/jquery-ui.js';
 export class GameboardComponent implements OnInit {
 
   constructor() {
-    document.body.style.backgroundColor ="rgba(86, 176, 214,0.4)";
-
+    document.body.style.backgroundColor ="rgba(86, 176, 214,0.4)";  
       
   }
 
