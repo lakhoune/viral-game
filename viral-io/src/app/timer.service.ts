@@ -18,7 +18,9 @@ constructor() { }
     startTimer(time){
         
         const takeFirst3$ = this.timer$.pipe(take(time+1)).subscribe(value => $(".countdown").html(time-value));
-       // const send = timer((time*1000)+1000).subscribe(value => this.game.sendAction());
+        const send = timer((time*1000)+3000).subscribe(value => {$("#lobbyCell").remove();
+        document.body.style.backgroundColor ="rgba(86, 176, 214,0.4)";  
+        $("#gBoard").css("visibility","visible");});
     }
     
 }

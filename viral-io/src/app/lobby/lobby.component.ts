@@ -35,7 +35,8 @@ constructor(private timer:TimerService, private game:GameService) {
 
   ngOnInit() {
         
-      
+      this.game.startGame();
+        
         
         $(document).ready(function(){
               
