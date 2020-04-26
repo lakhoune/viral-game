@@ -143,6 +143,14 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
         GameService.statusCode = -num;
     }
     
+resolve(bool,index:number){
+        if(bool==true){
+            $("#b"+(index+1)).parents(".back").css("background-color", "rgba(201, 255, 113,0.5)");
+        }else{
+            $("#b"+(index+1)).parents(".back").css("background-color", "rgba(250,0,0,0.5)");
+        }
+    setTimeout(function(){$("#b"+(index+1)).parents(".card-flip").css("transform", "rotateY(180deg)");},1000);
+    }
     
     sendAction(){console.log("Pluto is a Planet");}
 }

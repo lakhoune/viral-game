@@ -4,6 +4,8 @@ import { Component, OnInit } from '@angular/core';
 import * as $ from 'jquery';
 import 'jquery-ui-dist/jquery-ui.js';
 
+import {GameService} from '../game.service';
+
 @Component({
   selector: 'app-cell',
   templateUrl: './cell.component.html',
@@ -11,7 +13,7 @@ import 'jquery-ui-dist/jquery-ui.js';
 })
 export class CellComponent implements OnInit {
 
-  constructor() { 
+  constructor(private game:GameService) { 
 
 
   }
@@ -23,10 +25,10 @@ export class CellComponent implements OnInit {
        // $( "#board" ).append(container);
       $("#f1").html('Apfelbaum');
       $("#b1").html('Apfelbaum');
-      $("#b1").parents(".back").css("background-color", "rgba(201, 255, 113,0.5)");
-    setTimeout(function(){$(".card-flip").css("transform", "rotateY(180deg)");},3000);
-      setTimeout(function(){$(".card-flip").css("transform", "rotateY(0deg)");},6000)
-       setTimeout(function(){$(".card-flip").css("transform", "rotateY(180deg)");},9000);
+    this.game.resolve(true,0);
+      this.game.resolve(false,1);
+      this.game.resolve(true,4);
+   
       
       
   }
