@@ -28,7 +28,6 @@ export class CellComponent implements OnInit {
     this.game.resolve(true,0);
       this.game.resolve(false,1);
       this.game.resolve(true,4);
-   
       
       
   }

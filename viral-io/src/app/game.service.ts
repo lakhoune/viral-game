@@ -126,6 +126,11 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
         $("#countdown").html('<small style="font-size:.3em;">Spiel startet in:</small>');
         this.timer.startTimer(20);
         
+        //the following code should be executed as a result of the timer reaching 0
+        $("#lobbyCell").remove();
+        document.body.style.backgroundColor ="rgba(86, 176, 214,0.4)";  
+        $("#gBoard").css("visibility","visible");
+        
     }
     endGame(){
         GameService.status.next(40);

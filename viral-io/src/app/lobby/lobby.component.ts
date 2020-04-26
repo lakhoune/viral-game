@@ -37,7 +37,6 @@ constructor(private timer:TimerService, private game:GameService) {
         
       
         
-        
         $(document).ready(function(){
               
             //add cells to the DOM 
