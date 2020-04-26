@@ -32,13 +32,27 @@
 
 .front {
   grid-area: frontAndBack;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.12), 0 3px 5px rgba(0,0,0,0.14);
+    background-color: rgba(250,250,250,0.5);
 }
 
 .back {
   grid-area: frontAndBack;
   transform: rotateY(-180deg);
+    box-shadow: 0 3px 5px rgba(0,0,0,0.12), 0 3px 5px rgba(0,0,0,0.14);
+    background-color: rgba(250,0,0,0.5);
 }
 
 .card-container:hover .card-flip {
   transform: rotateY(180deg);
+}
+.card-block{
+    
+    height:10vh;
+    max-height: 5em;
+}
+
+.class-table{
+    height: 10vh; margin: auto;
+    max-height: 5em;
 }

@@ -67,6 +67,7 @@ export class GameService {
     static game;
     static team;
     static player;
+    static rounds:any[];
     
     
     
@@ -92,9 +93,15 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
     }
     
     
-    nextRound(){
+    nextRound(round){
         GameService.status.next(GameService.statusCode+100);
         GameService.statusCode = GameService.statusCode+100;
+        
+        //var newRound = new round();
+        
+        //GameService.rounds.push(newRound)
+        
+        
     }
     nextLap(){
         GameService.status.next(GameService.statusCode+10);
