@@ -86,9 +86,9 @@ constructor(private auth: SessionauthService, private game: GameService) {      
 
         this.socket.on("status", (s) => {
             console.log(s);
-            status = JSON.parse(s);
-            //console.log(status);
-            this.game.parse(status);
+            var state = JSON.parse(s);
+            console.log(state);
+            this.game.parse(state);
         });
 
         //save lobby ID

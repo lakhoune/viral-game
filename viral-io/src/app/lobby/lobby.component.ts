@@ -38,7 +38,7 @@ constructor(private timer:TimerService, private game:GameService) {
     overflow: 'hidden',
     height: '100%'
 });
-      this.game.startGame();
+     // this.game.startGame();
         
         
         $(document).ready(function(){

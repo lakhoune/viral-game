@@ -82,7 +82,7 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
         if(status.code==20){
             this.startGame();
         }
-        this.startGame();
+        
     }
     
     //constructors
@@ -123,6 +123,13 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
         GameService.statusCode = 20;
     }   
     startGame(){
+        
+        //var stringJ = '{"code":"test"}';
+        //var jsonJ = JSON.parse(stringJ);
+        
+        //console.log(jsonJ.code);
+        
+        
         GameService.status.next(3000);
         GameService.statusCode = 3000;
         $("#countdown").html('<small style="font-size:.3em;">Spiel startet in:</small>');
