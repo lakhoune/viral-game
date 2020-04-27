@@ -163,6 +163,12 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
         }
         setTimeout(function(){$("#b"+(index+1)).parents(".card-flip").css("transform", "rotateY(180deg)");},1000);
     }
+    reset(){
+        for(var i=1;i<13;i++){
+            $("#b"+i).parents(".back").css("background-color", "rgba(250,250,250,0.5)");
+            $("#b"+i).parents(".card-flip").css("transform", "rotateY(0deg)");
+        }
+    }
     
     sendAction(){console.log("Pluto is a Planet");}
 }

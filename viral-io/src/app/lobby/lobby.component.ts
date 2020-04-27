@@ -38,7 +38,11 @@ constructor(private timer:TimerService, private game:GameService) {
     overflow: 'hidden',
     height: '100%'
 });
-     // this.game.startGame();
+    //this.game.startGame();
+    //this.game.resolve(true,0);
+      //this.game.resolve(false,1);
+      //this.game.resolve(true,4);
+    //this.game.reset();
         
         
         $(document).ready(function(){

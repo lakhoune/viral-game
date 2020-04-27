@@ -9,8 +9,7 @@ import 'jquery-ui-dist/jquery-ui.js';
 export class GameboardComponent implements OnInit {
 
   constructor() {
-    
-      
+
   }
 
   ngOnInit() {

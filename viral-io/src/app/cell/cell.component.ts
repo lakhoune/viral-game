@@ -25,16 +25,9 @@ export class CellComponent implements OnInit {
        // $( "#board" ).append(container);
       $("#f1").html('Apfelbaum');
       $("#b1").html('Apfelbaum');
-    this.game.resolve(true,0);
-      this.game.resolve(false,1);
-      this.game.resolve(true,4);
+  
       
       
   }
 
-rotate(){
-    
-    $("#begriff").style.transform = "rotate(7deg)";
-    
-}
 }
