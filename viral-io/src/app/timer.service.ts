@@ -20,7 +20,15 @@ constructor() { }
         const takeFirst3$ = this.timer$.pipe(take(time+1)).subscribe(value => $(".countdown").html(time-value));
         const send = timer((time*1000)+3000).subscribe(value => {$("#lobbyCell").remove();
         document.body.style.backgroundColor ="rgba(86, 176, 214,0.4)";  
-        $("#gBoard").css("visibility","visible");});
+        $("#gBoard").css("visibility","visible");$("#navigation").css("position","fixed");
+        
+        $("#navigationPseudo").css("width","100%");
+        $("#navigationPseudo").css("height","80px");
+        $('html, body').css({
+    overflow: 'auto',
+    height: 'auto'
+});
+        });
     }
     
 }

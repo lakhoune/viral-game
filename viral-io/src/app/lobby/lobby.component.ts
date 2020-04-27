@@ -34,7 +34,10 @@ constructor(private timer:TimerService, private game:GameService) {
 }
 
   ngOnInit() {
-        
+        $('html, body').css({
+    overflow: 'hidden',
+    height: '100%'
+});
       this.game.startGame();
         
         

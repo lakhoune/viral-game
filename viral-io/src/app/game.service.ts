@@ -75,7 +75,7 @@ export class GameService {
 constructor(private auth: SessionauthService, private timer:TimerService) {      
         
     }
-    
+    //parse incominfg status updates
     parse(status){
         //console.log(status);
         console.log(status.code);
@@ -84,6 +84,8 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
         }
         this.startGame();
     }
+    
+    //constructors
     static createLobby(id){
         GameService.lobby = new lobby(id);
     }
@@ -92,7 +94,7 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
         GameService.player = new player(name);
     }
     
-    
+    //game
     nextRound(round){
         GameService.status.next(GameService.statusCode+100);
         GameService.statusCode = GameService.statusCode+100;
@@ -124,7 +126,7 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
         GameService.status.next(3000);
         GameService.statusCode = 3000;
         $("#countdown").html('<small style="font-size:.3em;">Spiel startet in:</small>');
-        this.timer.startTimer(20);
+        this.timer.startTimer(5);
         
         //the following code should be executed as a result of the timer reaching 0
 
@@ -145,14 +147,14 @@ constructor(private auth: SessionauthService, private timer:TimerService) {
         GameService.status.next(-num);
         GameService.statusCode = -num;
     }
-    
-resolve(bool,index:number){
+    //dom manipulation
+    resolve(bool,index:number){
         if(bool==true){
             $("#b"+(index+1)).parents(".back").css("background-color", "rgba(201, 255, 113,0.5)");
         }else{
             $("#b"+(index+1)).parents(".back").css("background-color", "rgba(250,0,0,0.5)");
         }
-    setTimeout(function(){$("#b"+(index+1)).parents(".card-flip").css("transform", "rotateY(180deg)");},1000);
+        setTimeout(function(){$("#b"+(index+1)).parents(".card-flip").css("transform", "rotateY(180deg)");},1000);
     }
     
     sendAction(){console.log("Pluto is a Planet");}
