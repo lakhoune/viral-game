@@ -9,16 +9,26 @@ export class SessionauthService {
   constructor() { }
 
 
-static setID(num){
+static setToken(token){
     
-    localStorage.setItem('token', num);
+    localStorage.setItem('token', token);
+}
+static setID(id){
+    
+    localStorage.setItem('id', id);
 }
 
 static deleteID(){
     
     localStorage.removeItem('token');
+    localStorage.removeItem('id');
 }
 static readID(){
+    
+    return localStorage.getItem('id');
+    
+}
+static readToken(){
     
     return localStorage.getItem('token');
     

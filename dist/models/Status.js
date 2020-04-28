@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-class Score {
+class Status {
     constructor() { }
 }
-exports.Score = Score;
-//# sourceMappingURL=Score.js.map
+exports.Status = Status;
+//# sourceMappingURL=Status.js.map

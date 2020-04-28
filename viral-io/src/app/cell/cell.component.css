@@ -2,3 +2,57 @@
 
 
 .begriff{font-family: 'Varela Round', sans-serif;}
+
+
+
+
+/* Visit https://nicolaskadis.info/posts/pure-css-flip-cards-using-bootstrap-4-and-css-grid-no-js for an explanation */
+
+/* for demo purposes */
+
+/* Flip Cards CSS */
+.card-container {
+  display: grid;
+  perspective: 50em;
+  background-color:;
+}
+
+.card-flip {
+  display: grid;
+  grid-template: 1fr / 1fr;
+  grid-template-areas: "frontAndBack";
+  transform-style: preserve-3d;
+  transition: all 1s ease;
+}
+
+.card-flip div {
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.front {
+  grid-area: frontAndBack;
+    box-shadow: 0 3px 5px rgba(0,0,0,0.12), 0 3px 5px rgba(0,0,0,0.14);
+    background-color: rgba(250,250,250,0.5);
+}
+
+.back {
+  grid-area: frontAndBack;
+  transform: rotateY(-180deg);
+    box-shadow: 0 3px 5px rgba(0,0,0,0.12), 0 3px 5px rgba(0,0,0,0.14);
+    background-color: rgba(250,250,250,0.5);
+}
+
+.card-container:hover .card-flip {
+  transform: rotateY(180deg);
+}
+.card-block{
+    
+    height:10vh;
+    max-height: 5em;
+}
+
+.class-table{
+    height: 10vh; margin: auto;
+    max-height: 5em;
+}

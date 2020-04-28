@@ -80,22 +80,24 @@ export class SocketioService {
 
     //save session token in local storage
     this.socket.on("token", (token) => {
-      //SessionauthService.setID(token); //disabled for testing
+      SessionauthService.setToken(token); //disabled for testing
+
       console.log(SessionauthService.readID());
     });
+
     this.socket.on("status", (s) => {
-      if (s == 20) {
-        this.game.startGame();
-      }
       console.log(s);
-      status = JSON.parse(s);
-      console.log(status);
-      this.game.parse(status);
+      var state = JSON.parse(s);
+      console.log(state);
+      this.game.parse(state);
     });
 
     //save lobby ID
     this.socket.on("lobbyID", (id) => {
       SocketioService.lobbyID = id;
+
+      SessionauthService.setID(id); //disabled for testing
+
       this.lobbyIDUpdated.next(SocketioService.lobbyID);
       console.log(SocketioService.lobbyID);
     });
@@ -136,16 +138,19 @@ export class SocketioService {
   }
 
   joinLobby(num) {
-    if (SessionauthService.readID()) {
-      console.log(SessionauthService.readID());
-      console.log(num);
-      this.socket.emit("rejoinLobby", SessionauthService.readID(), num);
-    } else {
-      this.socket.emit("joinLobby", num);
-      GameService.createLobby(num);
-      this.getLobbySize();
-      this.getNames(num);
-    }
+    /*if(SessionauthService.readID()==num){
+            console.log(SessionauthService.readID());
+            console.log(SessionauthService.readToken());
+            console.log(num);
+            this.socket.emit("rejoinLobby", SessionauthService.readToken(), SessionauthService.readID());
+
+        } else {*/
+
+    this.socket.emit("joinLobby", num);
+    GameService.createLobby(num);
+    this.getLobbySize();
+    this.getNames(num);
+    //}
   }
 
   setName(name) {
