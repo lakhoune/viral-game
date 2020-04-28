@@ -119,7 +119,8 @@ gameSocket.on("connection", (socket) => {
     });
     socket.on("disconnect", (data) => {
         let tmp = socket.currLobby;
-        if (data == "transport close") {
+        console.log(socket + " disconnected", "reason: ", data);
+        if (tmp) {
             socket.services.lobby.removeFromLobby(socket, (err) => {
                 if (err) {
                     console.log("removeFromLobby:", err);
@@ -142,9 +143,9 @@ function getSocket(socketId, room) {
     return getSocketsInRoom(room)[socketId];
 }
 function logClients(room, s) {
-    io.of("/game")
-        .in(room)
-        .clients((error, clients) => {
+    //This function returns the wrong clients for team DNA for some reason
+    //even though clients are properly assigned to rooms (as seen by broadcast to frontend clients)
+    gameSocket.in(room).clients((error, clients) => {
         if (error)
             throw error;
         if (s == "DNA") {
@@ -158,13 +159,10 @@ function logClients(room, s) {
 //assigns clients to their team room
 function assignClients(lobby, callback) {
     try {
-        logClients(`${lobby.id}.DNA`, "DNA");
-        logClients(`${lobby.id}.RNA`, "RNA");
         for (let member of lobby.game.DNA.members) {
             let sock = getSocket(member.socketId, lobby.id); //get socket of participant
             if (sock) {
-                sock.join(`${lobby.id}.DNA`).emit("log", "Joined Team DNA"); //join room for team dna
-                sock.emit("log", "Your team: " + lobby.game.DNA.names);
+                sock.join(`DNA${lobby.id}`).emit("log", "Joined Team DNA"); //join room for team dna
             }
             else {
                 throw new Error("sock undefined" + member.socketId);
@@ -173,15 +171,16 @@ function assignClients(lobby, callback) {
         for (let member of lobby.game.RNA.members) {
             let sock = getSocket(member.socketId, lobby.id); //get socket of participant
             if (sock) {
-                sock.join(`${lobby.id}.RNA`).emit("log", "Joined Team RNA"); //join room for team dna
-                sock.emit("log", "Your team: " + lobby.game.RNA.names);
+                sock.join(`RNA${lobby.id}`).emit("log", "Joined Team RNA"); //join room for team dna
             }
             else {
                 throw new Error("sock undefined" + member.socketId);
             }
         }
-        logClients(`${lobby.id}.DNA`, "DNA");
-        logClients(`${lobby.id}.RNA`, "RNA");
+        //logClients(`DNA${lobby.id}`, "DNA");
+        //logClients(`RNA${lobby.id}`, "RNA");
+        gameSocket.in(`DNA${lobby.id}`).emit("log", "Your team: " + lobby.game.DNA.names);
+        gameSocket.in(`RNA${lobby.id}`).emit("log", "Your team: " + lobby.game.RNA.names);
         callback(null);
     }
     catch (error) {

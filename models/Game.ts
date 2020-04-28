@@ -1,8 +1,8 @@
 import { Team } from "./Team";
 import { Round } from "./round/Round";
-import { score } from "./round/score";
+import { Score } from "./round/Score";
 export class Game {
-  globalScore: score;
+  globalScore: Score;
   rounds: Round[]; //type missing
   DNA: Team;
   RNA: Team;

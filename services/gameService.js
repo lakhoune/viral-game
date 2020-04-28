@@ -18,18 +18,18 @@ module.exports = function gameService() {
         throw new Error("lobby non existant");
       }
       let participants = lobby.participants;
-        console.log("ruhe vor");
-        console.log(participants);
-        console.log("dem Sturm");
+      // console.log("ruhe vor");
+      // console.log(participants);
+      // console.log("dem Sturm");
       shuffle(participants);
       let middle = participants.length / 2;
       let Team1 = new Team(participants.slice(0, middle));
       let Team2 = new Team(participants.slice(middle, participants.length));
-        
-        console.log("Schaft");
-            console.log(Team1);
-            console.log(Team2);
-        console.log("Eichel");
+
+      // console.log("Schaft");
+      //     console.log(Team1);
+      //     console.log(Team2);
+      // console.log("Eichel");
       let game = new Game(participants.length, Team1, Team2);
       lobby.game = game;
       callback(null, lobby);
