@@ -1,5 +1,6 @@
 module.exports = function validationService() {
   const io = require("socket.io")();
+  //validate lobby duplicate ids
   validationService.checkLobbyId = (lobbies, id) => {
     for (let i = 0; i < lobbies.length; i++) {
       if (lobbies[i].id == id) {
@@ -7,11 +8,13 @@ module.exports = function validationService() {
       }
     }
   };
+  //validate player names (3 char)
   validationService.isValidName = (name) => {
     if (!name || name.length < 3) {
       throw new Error("Please provide a name of at least 3 characters");
     }
   };
+  //validate if player already joined lobby
   validationService.checkDuplicate = async (lobbyId, socketId) => {
     return await new Promise((resolve, reject) => {
       io.of("/game")
@@ -26,11 +29,15 @@ module.exports = function validationService() {
         });
     });
   };
+
+  //validate if lobby is full
   validationService.hasFreeSpace = (lobby) => {
     if (lobby.participants.length >= lobby.capacity) {
       throw new Error("lobby full");
     }
   };
+
+  //validate lobby size (4, 6 or 8)
   validationService.checkSize = (sizes, size) => {
     if (!sizes.includes(size)) {
       throw new Error(
@@ -38,6 +45,7 @@ module.exports = function validationService() {
       );
     }
   };
+  //validate words
   validationService.checkInfix = (w1, w2) => {
     let regex1 = new RegExp(`[abc]*${w1}[abc]*`, "i");
     let regex2 = new RegExp(`[abc]*${w2}[abc]*`, "i");

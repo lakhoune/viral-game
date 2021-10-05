@@ -1,7 +1,8 @@
 const express = require("express");
 const socket = require("socket.io");
-const app = express();
+const middleware = require("../middleware/serviceMiddleware.js");
 //Express server
+const app = express();
 const server = app.listen(80, () => {
     console.log("listening on 80");
 });
@@ -12,7 +13,7 @@ const io = socket(server);
 const chat = io.of("/admin");
 const gameSocket = io.of("/game");
 //Service Middleware
-gameSocket.use(require("../middleware/serviceMiddleware.js")());
+gameSocket.use(middleware());
 gameSocket.on("connection", (socket) => {
     console.log(socket.id, " connected");
     socket.emit("log", "Successfully connected, socket id: " + socket.id);
